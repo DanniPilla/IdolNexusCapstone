@@ -1,7 +1,10 @@
-import { integer, pgTable, varchar } from "drizzle-orm/pg-core";
-export const usersTable = pgTable("users", {
-  id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  name: varchar({ length: 255 }).notNull(),
-  age: integer().notNull(),
-  email: varchar({ length: 255 }).notNull().unique(),
+import { pgTable, serial, varchar, text, timestamp } from "drizzle-orm/pg-core";
+
+export const events = pgTable('events', {
+  id: serial('id').primaryKey(),
+  name: varchar('name', { length: 255 }),
+  description: text('description'),
+  date: timestamp('date'),
+  location: varchar('location', { length: 255 }),
+  price: varchar('price', { length: 50 }),
 });
