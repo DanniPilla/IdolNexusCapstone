@@ -19,9 +19,9 @@ const EventCard = ({ events }) => {
 
         <div className="p-6 bg-pink-300 rounded-b-lg">
           <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold pb-5">{events.name}</h2>
-          <p className="text-sm sm:text-base lg:text-lg"><strong>Ranking: #</strong>{events.date}</p>
-          <p className="text-sm mb-2 sm:text-base lg:text-lg"><strong>Episodes: </strong>{events.location}</p>
-          <p className="text-sm mb-2 sm:text-base lg:text-lg"><strong>Status:</strong> {events.price}</p>
+          <p className="text-sm sm:text-base lg:text-lg"><strong>Date: </strong>{new Date(events.date).toLocaleString()}</p>
+          <p className="text-sm mb-2 sm:text-base lg:text-lg"><strong>Location: </strong>{events.location}</p>
+          <p className="text-sm mb-2 sm:text-base lg:text-lg">{events.price}</p>
         </div>
       </div>
     </a>
