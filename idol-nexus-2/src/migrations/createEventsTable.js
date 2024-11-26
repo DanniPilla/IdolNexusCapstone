@@ -7,7 +7,8 @@ export const up = sql`
     description TEXT,
     date TIMESTAMP,
     location VARCHAR(255),
-    price VARCHAR(50)
+    price VARCHAR(50),
+    category TEXT
   );
 `;
 
