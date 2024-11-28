@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet-async";
 
 // save as pages/PostsPage.jsx
 export default function FindEventPage() {
-   const { theme } = useContext(MyThemeContext);
+
  return (
     <div
       className="w-full min-h-screen  "

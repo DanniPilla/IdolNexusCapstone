@@ -1,8 +1,8 @@
 import { useSearchParams } from "react-router-dom";
 import {Search} from 'lucide-react'
 import {useEventSearch} from '../hooks/useEventSearch'
-import EventCard from "..components/EventCard";
-import SkeletonCard from "../components/SkeletonCard";
+import EventCard from "./EventCard";
+import SkeletonCard from "./SkeletonCard";
 
 const EventSearchBox = () => {
   const [searchParams, setSearchParams] = useSearchParams();

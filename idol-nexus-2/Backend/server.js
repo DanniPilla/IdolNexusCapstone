@@ -1,7 +1,8 @@
 import express from "express";
 import cors from "cors";
-import { db } from "./src/db/index";
-import { events } from "./src/db/eventSchema";
+import { db } from "./db/index.js";
+import { events } from "./db/eventSchema.js";
+import "dotenv/config";
 
 //events
 const app1 = express();

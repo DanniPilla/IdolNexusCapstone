@@ -1,51 +1,17 @@
 {
   "name": "idol-nexus-2",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "version": "1.0.0",
+  "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
+  "main": "eslint.config.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "vite, nodemon server.js",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview",
-    "seed": "node seed.js",
-    "migrate": "drizzle migrate up",
-    "rollback": "drizzle migrate down"
+     "dev": "concurrently \"npm run dev --prefix Frontend\" \"nodemon Backend/server.js\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "@neondatabase/serverless": "^0.10.3",
-    "@stripe/react-stripe-js": "^3.0.0",
-    "@stripe/stripe-js": "^5.2.0",
-    "body-parser": "^1.20.3",
     "concurrently": "^9.1.0",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
-    "drizzle-orm": "^0.36.4",
-    "express": "^4.21.1",
-    "firebase": "^11.0.2",
-    "lucide-react": "^0.460.0",
-    "mongoose": "^8.8.2",
-    "pg": "^8.13.1",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-error-boundary": "^4.1.2",
-    "react-helmet-async": "^2.0.5",
-    "react-router-dom": "^6.28.0"
-  },
-  "devDependencies": {
-    "@eslint/js": "^9.13.0",
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
-    "@vitejs/plugin-react": "^4.3.3",
-    "drizzle-kit": "^0.28.1",
-    "eslint": "^9.13.0",
-    "eslint-plugin-react": "^7.37.2",
-    "eslint-plugin-react-hooks": "^5.0.0",
-    "eslint-plugin-react-refresh": "^0.4.14",
-    "globals": "^15.11.0",
-    "tailwindcss": "^3.4.15",
-    "tsx": "^4.19.2",
-    "vite": "^5.4.10"
+    "dotenv": "^16.4.5"
   }
 }

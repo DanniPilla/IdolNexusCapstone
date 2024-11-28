@@ -1,12 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom'
 
-import { useContext } from "react";
-import { MyThemeContext } from "../context/MyThemeContext";
-
-
 // save as pages/PostsPage.jsx
 export default function PageNotFound(){
-   const { theme } = useContext(MyThemeContext);
  return (
     <div
        className="w-full min-h-screen  "

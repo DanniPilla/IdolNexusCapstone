@@ -1,9 +1,9 @@
 
+import { useContext } from "react";
 import { Helmet } from "react-helmet-async"; 
 
 // save as pages/PostsPage.jsx
-export default function SignUpPage() {
-   const { theme } = useContext(MyThemeContext);
+export default function CreateEventPage() {
  return (
     <div
       className="w-full min-h-screen  "
@@ -32,7 +32,7 @@ export default function SignUpPage() {
       <h1 className="pl-6 text-8xl font-extrabold drop-shadow-lg text-pink-400 text-center mt-[5rem]">
         Anime
       </h1>
-
+      <AnimeSearch />
     </div>
   );
 }

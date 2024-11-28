@@ -2,8 +2,8 @@
 import { Helmet } from "react-helmet-async"; 
 
 // save as pages/PostsPage.jsx
-export default function LogInPage() {
-   const { theme } = useContext(MyThemeContext);
+export default function SignUpPage() {
+
  return (
     <div
       className="w-full min-h-screen  "

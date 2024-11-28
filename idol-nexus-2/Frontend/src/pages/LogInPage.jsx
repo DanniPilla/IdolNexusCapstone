@@ -1,12 +1,9 @@
 
-import AnimeSearch from "../components/AnimeSearch";
-import { useContext } from "react";
-import { MyThemeContext } from "../context/MyThemeContext";
 import { Helmet } from "react-helmet-async"; 
 
 // save as pages/PostsPage.jsx
-export default function CreateEventPage() {
-   const { theme } = useContext(MyThemeContext);
+export default function LogInPage() {
+
  return (
     <div
       className="w-full min-h-screen  "
@@ -35,7 +32,7 @@ export default function CreateEventPage() {
       <h1 className="pl-6 text-8xl font-extrabold drop-shadow-lg text-pink-400 text-center mt-[5rem]">
         Anime
       </h1>
-      <AnimeSearch />
+
     </div>
   );
 }

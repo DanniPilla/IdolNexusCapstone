@@ -1,5 +1,5 @@
-import { db } from "./src/db/index.js";
-import { events } from "./src/db/eventSchema.js";
+import { db } from "./db/index.js";
+import { events } from "./db/eventSchema.js";
 
 async function testConnection() {
   try {
