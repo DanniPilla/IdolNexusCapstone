@@ -7,11 +7,7 @@ export default function SignUpPage() {
  return (
     <div
       className="w-full min-h-screen  "
-      style={{
-        backgroundColor: theme.background,
-        color: theme.foreground,
-       
-      }}
+    
     >
        <Helmet>
         <title>Anime Search | Discover Your Favorite Anime</title>

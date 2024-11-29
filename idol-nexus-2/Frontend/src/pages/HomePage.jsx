@@ -4,10 +4,7 @@ export default function HomePage(){
  return (
     <div
       className="w-full min-h-screen  flex flex-col justify-center items-center "
-      style={{
-        backgroundColor: theme.background,
-        color: theme.foreground,
-      }}
+    
     >
       <h1 className="text-center mt-[5rem]">
        Welcome to<div className="pl-6 text-6xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold text-pink-600 drop-shadow-lg">
