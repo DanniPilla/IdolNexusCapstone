@@ -1,6 +1,6 @@
 
 import { Helmet } from "react-helmet-async"; 
-
+import EventSearchBox from '../components/EventSearchBox'
 // save as pages/PostsPage.jsx
 export default function FindEventPage() {
 
@@ -28,7 +28,7 @@ export default function FindEventPage() {
       <h1 className="pl-6 text-8xl font-extrabold drop-shadow-lg text-pink-400 text-center mt-[5rem]">
         Anime
       </h1>
-
+<EventSearchBox/>
     </div>
   );
 }

@@ -11,7 +11,7 @@ const PORT = 5000;
 app1.use(cors()); // Allow requests from the frontend
 
 // Endpoint to get all events
-app1.get("/findevents", async (req, res) => {
+app1.get("/events", async (req, res) => {
   try {
     const eventList = await db.select().from(events);
     res.json(eventList);

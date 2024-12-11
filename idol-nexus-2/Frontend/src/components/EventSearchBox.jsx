@@ -1,13 +1,13 @@
 import { useSearchParams } from "react-router-dom";
 import {Search} from 'lucide-react'
-import {useEventSearch} from '../hooks/useEventSearch'
+import useEventSearch from '../hooks/useEventSearch'
 import EventCard from "./EventCard";
 import SkeletonCard from "./SkeletonCard";
 
 const EventSearchBox = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const {  eventsData, setSearchTerm, searchTerm, loading,} = useEventSearch();
-  const skeletonArray = Array.from({ length: size }, (_, i) => i);
+  const skeletonArray = Array.from({ length: 10 }, (_, i) => i);
 
 
    return (
@@ -26,13 +26,13 @@ const EventSearchBox = () => {
 </div>
      </div>
  <div className="mx-14 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-7 items-center">
-        {loading
-          ? skeletonArray.map((_, index) => <SkeletonCard key={index} />)
-          : eventsData.length > 0
-          ? eventsData.map((event) => (
+        {loading===true? (
+          skeletonArray.map((_, index) => <SkeletonCard key={index} />)
+        ) : loading===false && eventsData.length > 0? (
+          eventsData.map((event) => (
               <EventCard key={event._id || event.id} events={event} />
             ))
-          : !loading && (
+          ): (
           <p className="text-center">Sorry, there isn't an event that matches your search.</p>
         )}
       </div>

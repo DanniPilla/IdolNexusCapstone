@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 
-const useEventsList = () => {
+const useEventSearch  = () => {
   const [eventsData, setEventsData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
 
  useEffect(() => {
@@ -42,6 +42,6 @@ const fetchEvents = async () => {
     loading,
   };
 };
-  export default useEventsList
+  export default useEventSearch 
 
 
