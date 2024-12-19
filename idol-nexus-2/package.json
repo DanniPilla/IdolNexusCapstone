@@ -1,0 +1,19 @@
+{
+  "name": "idol-nexus-2",
+  "version": "1.0.0",
+  "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
+  "main": "eslint.config.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix Frontend\" \"nodemon Backend/server.js\"",
+     "build": "npm run build --prefix Frontend",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^9.1.0",
+    "dotenv": "^16.4.5"
+  }
+  
+}
