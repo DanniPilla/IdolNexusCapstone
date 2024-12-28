@@ -3,7 +3,14 @@
 #root {
 
   margin: 0 auto;
-
+background-color: #E2E0FF;
   text-align: center;
 }
 
+nav{
+  background-color: #FFA5FD;
+}
+
+footer{
+  background-color: #FFA5FD;
+}

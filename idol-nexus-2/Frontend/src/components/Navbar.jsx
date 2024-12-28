@@ -7,7 +7,7 @@ export default function NavBar() {
 
 return (
 <nav 
-  className="NavBar sticky  top-0  w-full  flex justify-between items-center shadow-md bg-white  z-50">
+  className="NavBar sticky  top-0  w-full  flex justify-between items-center shadow-md  z-50">
    <div className="pl-6 text-2xl font-extrabold text-pink-600 drop-shadow-lg">
         <p>
           <span className="text-pink-400">Anime</span>
