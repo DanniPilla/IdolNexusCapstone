@@ -12,7 +12,6 @@ export default defineConfig({
     "./db/ticketSchema.js",
     "./db/calendarSchema.js",
     "./db/orderSchema.js",
-    "./db/organiserSchema.js",
     "./db/paymentSchema.js",
     "./db/venueSchema.js",
   ],

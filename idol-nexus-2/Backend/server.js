@@ -7,7 +7,6 @@ import userRoutes from "./routes/userRoutes.js";
 import ticketRoutes from "./routes/ticketRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
-import organiserRoutes from "./routes/organiserRoutes.js";
 import venueRoutes from "./routes/venueRoutes.js";
 import calendarRoutes from "./routes/calendarRoutes.js";
 
