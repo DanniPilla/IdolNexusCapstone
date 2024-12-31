@@ -6,11 +6,8 @@ export const up = sql`
       name VARCHAR(255) NOT NULL,
       description TEXT,
       category VARCHAR(50) NOT NULL,
-      tags JSON DEFAULT '[]',
-      organizer_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
       start_date TIMESTAMP NOT NULL,
       end_date TIMESTAMP NOT NULL,
-      status VARCHAR(20) DEFAULT 'upcoming',
       location VARCHAR(255),
       virtual_link TEXT,
       capacity INTEGER DEFAULT 0,
@@ -18,8 +15,18 @@ export const up = sql`
       created_at TIMESTAMP DEFAULT NOW(),
       updated_at TIMESTAMP DEFAULT NOW()
     );
+
+  -- Indexes for improved query performance
+  CREATE INDEX idx_events_start_date ON events (start_date);
+  CREATE INDEX idx_events_category ON events (category);
 `;
 
 export const down = sql`
+  -- Drop indexes first
+  DROP INDEX IF EXISTS idx_events_start_date;
+  DROP INDEX IF EXISTS idx_events_category;
+  DROP INDEX IF EXISTS idx_events_status;
+
+  -- Drop table
   DROP TABLE events;
 `;

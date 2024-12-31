@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "order_id": 1,
+    "stripe_payment_id": "pi_1L8g5E2eZvKYlo2C8Y4C9C",
+    "amount": 150.00,
+    "created_at": "2024-01-01T10:00:00.000Z",
+    "updated_at": "2024-01-01T10:00:00.000Z"
+  },
+  {
+    "id": 2,
+    "order_id": 2,
+    "stripe_payment_id": "pi_1L8g6F2eZvKYlo2C8Y4D9C",
+    "amount": 50.00,
+    "created_at": "2024-01-02T11:00:00.000Z",
+    "updated_at": "2024-01-02T11:00:00.000Z"
+  },
+  {
+    "id": 3,
+    "order_id": 3,
+    "stripe_payment_id": "pi_1L8g7G2eZvKYlo2C8Y4E9C",
+    "amount": 100.00,
+    "created_at": "2024-01-03T12:00:00.000Z",
+    "updated_at": "2024-01-03T12:00:00.000Z"
+  },
+  {
+    "id": 4,
+    "order_id": 4,
+    "stripe_payment_id": "pi_1L8g8H2eZvKYlo2C8Y4F9C",
+    "amount": 80.00,
+    "created_at": "2024-01-04T13:00:00.000Z",
+    "updated_at": "2024-01-04T13:00:00.000Z"
+  },
+  {
+    "id": 5,
+    "order_id": 5,
+    "stripe_payment_id": "pi_1L8g9I2eZvKYlo2C8Y4G9C",
+    "amount": 60.00,
+    "created_at": "2024-01-05T14:00:00.000Z",
+    "updated_at": "2024-01-05T14:00:00.000Z"
+  }
+]
