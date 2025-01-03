@@ -1,6 +1,58 @@
 import { db } from "../lib/index.js";
 import { users } from "../db/userSchema.js";
 import { firebaseAuth } from "../utils/firebaseAdmin.js";
+import { hashPassword, verifyPassword } from '../utils/password.js';
+
+// User registration
+export const registerUser = async (req, res) => {
+  const { email, password, firstName, lastName } = req.body;
+
+  try {
+    const existingUser = await db.select().from(users).where(users.email.equals(email)).limit(1);
+    if (existingUser.length > 0) {
+      return res.status(400).json({ error: 'User already exists' });
+    }
+    const hashedPassword = await hashPassword(password);
+
+    // Create the user
+    await db.insert(users).values({
+      email,
+      password: hashedPassword,
+      first_name: firstName,
+      last_name: lastName,
+    });
+
+    res.status(201).json({ message: 'User registered successfully' });
+  } catch (error) {
+    console.error('Error registering user:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+// User login
+export const loginUser = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    // Find the user
+    const user = await db.select().from(users).where(users.email.equals(email)).limit(1);
+
+    if (user.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Verify the password
+    const passwordMatch = await verifyPassword(password, user[0].password);
+    if (!passwordMatch) {
+      return res.status(401).json({ error: 'Invalid password' });
+    }
+
+    res.status(200).json({ message: 'Login successful', user: user[0] });
+  } catch (error) {
+    console.error('Error logging in user:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
 
 export const getAllUsers = async (req, res) => {
   try {

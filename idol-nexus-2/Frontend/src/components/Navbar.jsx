@@ -10,8 +10,8 @@ return (
   className="NavBar sticky  top-0  w-full  flex justify-between items-center shadow-md  z-50">
    <div className="pl-6 text-2xl font-extrabold text-pink-600 drop-shadow-lg">
         <p>
-          <span className="text-pink-400">Anime</span>
-          <span className=" text-pink-700">Finder</span>
+          <span className="text-pink-400">Idol</span>
+          <span className=" text-pink-700">Nexus</span>
         </p>
       </div>
   <ul className="flex justify-center space-x-4 py-4">
