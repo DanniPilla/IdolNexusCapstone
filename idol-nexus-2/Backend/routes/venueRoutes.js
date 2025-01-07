@@ -1,18 +1,18 @@
 import express from "express";
 import {
   getAllVenues,
-  getVenuesById,
-  createVenues,
-  updateVenues,
-  deleteVenues,
+  getVenueById,
+  createVenue,
+  updateVenue,
+  deleteVenue,
 } from "../controllers/venueController.js";
 
 const router = express.Router();
 
 router.get("/", getAllVenues);
-router.get("/:id", getVenuesById);
-router.post("/", createVenues);
-router.put("/:id", updateVenues);
-router.delete("/:id", deleteVenues);
+router.get("/:id", getVenueById);
+router.post("/", createVenue);
+router.put("/:id", updateVenue);
+router.delete("/:id", deleteVenue);
 
 export default router;

@@ -1,16 +1,20 @@
 import { db } from "../lib/index.js";
 import { users } from "../db/userSchema.js";
 import { firebaseAuth } from "../utils/firebaseAdmin.js";
-import { hashPassword, verifyPassword } from '../utils/password.js';
+import { hashPassword, verifyPassword } from "../utils/password.js";
 
 // User registration
 export const registerUser = async (req, res) => {
   const { email, password, firstName, lastName } = req.body;
 
   try {
-    const existingUser = await db.select().from(users).where(users.email.equals(email)).limit(1);
+    const existingUser = await db
+      .select()
+      .from(users)
+      .where(users.email.equals(email))
+      .limit(1);
     if (existingUser.length > 0) {
-      return res.status(400).json({ error: 'User already exists' });
+      return res.status(400).json({ error: "User already exists" });
     }
     const hashedPassword = await hashPassword(password);
 
@@ -22,10 +26,10 @@ export const registerUser = async (req, res) => {
       last_name: lastName,
     });
 
-    res.status(201).json({ message: 'User registered successfully' });
+    res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
-    console.error('Error registering user:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error("Error registering user:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
@@ -35,22 +39,55 @@ export const loginUser = async (req, res) => {
 
   try {
     // Find the user
-    const user = await db.select().from(users).where(users.email.equals(email)).limit(1);
+    const user = await db
+      .select()
+      .from(users)
+      .where(users.email.equals(email))
+      .limit(1);
 
     if (user.length === 0) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
 
     // Verify the password
     const passwordMatch = await verifyPassword(password, user[0].password);
     if (!passwordMatch) {
-      return res.status(401).json({ error: 'Invalid password' });
+      return res.status(401).json({ error: "Invalid password" });
     }
 
-    res.status(200).json({ message: 'Login successful', user: user[0] });
+    res.status(200).json({ message: "Login successful", user: user[0] });
   } catch (error) {
-    console.error('Error logging in user:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error("Error logging in user:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const handleFirebaseSignIn = async (req, res) => {
+  const { uid, email, name, picture } = req.user; // Extracted from decoded token
+
+  try {
+    // Check if the user exists
+    let user = await db
+      .select()
+      .from(users)
+      .where(users.firebase_uid.equals(uid))
+      .limit(1);
+
+    if (user.length === 0) {
+      // Create a new user if not found
+      user = await db.insert(users).values({
+        firebase_uid: uid,
+        email,
+        display_name: name,
+        profile_picture: picture,
+        role: "attendee", // Default role
+      });
+    }
+
+    res.status(200).json({ message: "User authenticated", user });
+  } catch (error) {
+    console.error("Error handling Firebase sign-in:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
