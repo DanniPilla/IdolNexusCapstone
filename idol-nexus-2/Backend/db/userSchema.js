@@ -12,8 +12,9 @@ export const users = pgTable("users", {
   id: serial("id").primaryKey(),
 
   // Authentication
-  firebaseUid: varchar("firebase_uid", { length: 255 }).notNull().unique(),
+  firebase_uid: varchar("firebase_uid", { length: 255 }).unique().notNull(),
   email: varchar("email", { length: 255 }).unique().notNull(),
+  password: varchar("password", { length: 255 }),
 
   firstName: varchar("first_name", { length: 100 }),
   lastName: varchar("last_name", { length: 100 }),

@@ -20,6 +20,8 @@
     "drizzle-orm": "^0.36.4",
     "express": "^4.21.1",
     "firebase-admin": "^13.0.1",
+    "neon": "^2.0.0",
+    "neon-serverless": "^0.5.3",
     "pg": "^8.13.1",
     "ws": "^8.18.0"
   },

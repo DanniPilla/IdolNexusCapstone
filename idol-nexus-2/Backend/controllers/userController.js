@@ -7,33 +7,47 @@ import { hashPassword, verifyPassword } from "../utils/password.js";
 export const registerUser = async (req, res) => {
   const { email, password, firstName, lastName } = req.body;
 
+  if (!email || !password || !firstName || !lastName) {
+    return res.status(400).json({ error: "All fields are required" });
+  }
+
   try {
+    // Check if user already exists
     const existingUser = await db
       .select()
       .from(users)
       .where(users.email.equals(email))
       .limit(1);
+
     if (existingUser.length > 0) {
       return res.status(400).json({ error: "User already exists" });
     }
+
+    // Hash the password
     const hashedPassword = await hashPassword(password);
 
     // Create the user
-    await db.insert(users).values({
-      email,
-      password: hashedPassword,
-      first_name: firstName,
-      last_name: lastName,
-    });
+    const [newUser] = await db
+      .insert(users)
+      .values({
+        email,
+        password: hashedPassword,
+        first_name: firstName,
+        last_name: lastName,
+      })
+      .returning(["id", "email", "first_name", "last_name"]);
 
-    res.status(201).json({ message: "User registered successfully" });
+    res.status(201).json({
+      message: "User registered successfully",
+      user: newUser,
+    });
   } catch (error) {
     console.error("Error registering user:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
 
-// User login
+// User login/
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
@@ -125,8 +139,8 @@ export const createUser = async (req, res) => {
         .json({ message: "Unauthorized: No token provided" });
     }
 
+    // Verify token and decode it
     const decodedToken = await firebaseAuth.verifyIdToken(token);
-
     const {
       uid: firebaseUid,
       email,
@@ -134,22 +148,32 @@ export const createUser = async (req, res) => {
       picture: profilePicture,
     } = decodedToken;
 
+    if (!email || !firebaseUid) {
+      return res
+        .status(400)
+        .json({ message: "Invalid token: Missing required fields" });
+    }
+
+    // Check if user already exists
     const existingUser = await db
       .select()
       .from(users)
-      .where(users.firebaseUid.equals(firebaseUid));
+      .where(users.firebase_uid.equals(firebaseUid))
+      .limit(1);
 
     if (existingUser.length > 0) {
-      return res
-        .status(200)
-        .json({ message: "User already exists", user: existingUser[0] });
+      return res.status(200).json({
+        message: "User already exists",
+        user: existingUser[0],
+      });
     }
 
+    // Insert new user
     const newUser = await db.insert(users).values({
-      firebaseUid,
+      firebase_uid: firebaseUid,
       email,
-      displayName: displayName || null,
-      profilePicture: profilePicture || null,
+      display_name: displayName || null,
+      profile_picture: profilePicture || null,
     });
 
     res.status(201).json({ message: "User created successfully", newUser });
