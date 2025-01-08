@@ -243,7 +243,7 @@ export const deleteUser = async (req, res) => {
     const existingUser = await db
       .select()
       .from(users)
-      .where(users.firebaseUid.equals(firebaseUid));
+      .where(users.firebase_uid === firebaseUid);
 
     if (existingUser.length === 0) {
       return res.status(404).json({ message: "User does not exist" });

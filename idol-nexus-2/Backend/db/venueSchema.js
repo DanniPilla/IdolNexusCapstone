@@ -2,8 +2,9 @@ import {
   pgTable,
   serial,
   varchar,
-  numeric,
   integer,
+  timestamp,
+  check,
 } from "drizzle-orm/pg-core";
 
 export const venues = pgTable("venues", {
@@ -15,4 +16,7 @@ export const venues = pgTable("venues", {
   country: varchar("country", { length: 100 }).notNull(),
   postalCode: varchar("postal_code", { length: 20 }),
   capacity: integer("capacity").default(0),
+  // Timestamps
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
 });

@@ -1,14 +1,39 @@
 import { db } from "../lib/index.js";
+import { config } from "dotenv";
+config({ path: "./Backend/.env" });
 import { venues } from "../db/venueSchema.js";
 
 export const getAllVenues = async (req, res) => {
   try {
-    const allVenues = await db.select().from(venues);
-    res.json(allVenues);
+    const results = await db.select().from(venues);
+    console.log("Venues fetched successfully:", results);
+    res.json(results);
   } catch (error) {
-    res.status(500).json({ message: "Error fetching venues", error });
+    console.error("Error fetching venues:", error);
+    res
+      .status(500)
+      .json({ message: "Error fetching venues", error: error.message });
   }
 };
+// export const getAllVenues = async (req, res) => {
+//   try {
+//     // Debugging: Log the query being generated
+//     const query = db.select().from(venues);
+//     console.log("Query:", query.toSQL()); // Log the SQL query for debugging
+
+//     // Execute the query
+//     const venuesList = await query;
+
+//     // Send the response
+//     res.json(venuesList);
+//   } catch (error) {
+//     console.error("Error fetching venues:", error);
+//     res.status(500).json({
+//       message: "Error fetching venues",
+//       error: error.message || error,
+//     });
+//   }
+// };
 
 export const createVenue = async (req, res) => {
   const { name, address, city, state, country, postalCode, capacity } =

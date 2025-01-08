@@ -18,7 +18,7 @@ const useEventSearch = () => {
     const fetchEvents = async () => {
       setLoading(true);
       try {
-        const response = await fetch("http://localhost:5000/events");
+        const response = await fetch("http://localhost:5000/api/events");
         if (!response.ok) {
           console.log("Response Status:", response.status); // Log status code
           console.log("Response:", await response.text()); // Log raw response text

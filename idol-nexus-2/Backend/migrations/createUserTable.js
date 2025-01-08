@@ -17,6 +17,8 @@ export const up = sql`
       website_url VARCHAR(255), -- Organiser-specific field
       social_links JSON DEFAULT '{}' CHECK (jsonb_typeof(social_links::jsonb) = 'object'), -- Organiser-specific field
       preferences JSON DEFAULT '{}' CHECK (jsonb_typeof(preferences::jsonb) = 'object'), -- Attendee-specific
+      password VARCHAR(255),
+      firebase_uid VARCHAR(255) UNIQUE,
       created_at TIMESTAMP DEFAULT NOW(),
       updated_at TIMESTAMP DEFAULT NOW()
     );

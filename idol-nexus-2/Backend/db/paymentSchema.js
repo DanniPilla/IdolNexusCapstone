@@ -5,28 +5,26 @@ import {
   varchar,
   numeric,
   timestamp,
+  index,
 } from "drizzle-orm/pg-core";
 
 import { orders } from "./orderSchema.js";
-import { users } from "./userSchema.js";
 
 export const payments = pgTable("payments", {
   id: serial("id").primaryKey(),
+
+  // Foreign keys
   orderId: integer("order_id")
     .notNull()
     .references(() => orders.id, { onDelete: "cascade" }),
-  userId: integer("user_id")
-    .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
 
-  // Payment Details
+  // Payment details
   stripePaymentId: varchar("stripe_payment_id", { length: 255 })
     .unique()
-    .notNull(), // Stripe charge/payment ID
+    .notNull(),
   amount: numeric("amount", { precision: 10, scale: 2 }).notNull(),
-  currency: varchar("currency", { length: 10 }).default("USD").notNull(),
-  paymentStatus: varchar("payment_status", { length: 20 }).default("pending"),
 
+  // Timestamps
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
