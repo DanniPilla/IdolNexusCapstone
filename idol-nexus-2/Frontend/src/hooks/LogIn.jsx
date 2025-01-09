@@ -8,7 +8,7 @@ import ImageCarousel from "../components/ImageCarousel"
     "https://i.pinimg.com/236x/8c/4d/3a/8c4d3a4a4815c1cef6489ca0f0629b43.jpg",
     "https://static.wikia.nocookie.net/jpop/images/a/a9/Kyotoflavor_Jul2021.jpg/revision/latest?cb=20210802200252"
   ];
-const SignIn = () => {
+const LogIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -136,4 +136,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default LogIn;

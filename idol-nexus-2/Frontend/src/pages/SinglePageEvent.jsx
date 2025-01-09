@@ -1,34 +1,60 @@
+import { Helmet } from "react-helmet-async";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom"; 
+import EventDetailsCard from "../components/EventDetailsCard";
 
-import { Helmet } from "react-helmet-async"; 
-
-// save as pages/PostsPage.jsx
 export default function SingleEventPage() {
+  const { eventId } = useParams(); // Extract the event ID from the URL
+  const [event, setEvent] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
- return (
-    <div
-      className="w-full min-h-screen  "
-    
-    >
-       <Helmet>
-        <title>Anime Search | Discover Your Favorite Anime</title>
-        <meta name="description" content="Find and explore your favorite anime series, characters, and genres. Search and discover anime in an easy and fun way." />
-        <meta name="keywords" content="anime, search, favorite anime, discover anime, anime genres, anime series" />
-        <meta property="og:title" content="Anime Search | Discover Your Favorite Anime" />
-        <meta property="og:description" content="Find and explore your favorite anime series, characters, and genres. Search and discover anime in an easy and fun way." />
-        <meta property="og:image" content="/images/anime-og-image.png" />
-        <meta property="og:url" content="https://yourwebsite.com/anime" />
+  useEffect(() => {
+    const fetchEvent = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/events/${eventId}`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch event details");
+        }
+        const data = await response.json();
+        console.log("fetched data", data)
+        setEvent(data);
+      } catch (err) {
+        console.error(err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvent();
+  }, [eventId]);
+
+  if (loading) return <div>Loading event details...</div>;
+  if (error) return <div>Error: {error}</div>;
+
+  return (
+    <div className="w-full min-h-screen">
+      <Helmet>
+        <title>{event.name} | Idol Nexus</title>
+        <meta name="description" content={event.description} />
+        <meta property="og:title" content={event.name} />
+        <meta property="og:description" content={event.description} />
+        <meta property="og:image" content={event.thumbnailImage || "/images/default-event-image.png"} />
+        <meta property="og:url" content={`https://IdolNexus.com/api/events/${eventId}`} />
         <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="AnimeSearch" />
+        <meta property="og:site_name" content="IdolNexus" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:site" content="@yourtwitterhandle" />
-        <meta name="twitter:title" content="Anime Search | Discover Your Favorite Anime" />
-        <meta name="twitter:description" content="Find and explore your favorite anime series, characters, and genres. Search and discover anime in an easy and fun way." />
-        <meta name="twitter:image" content="/images/anime-twitter-image.png" />
+        <meta name="twitter:title" content={event.name} />
+        <meta name="twitter:description" content={event.description} />
+        <meta name="twitter:image" content={event.thumbnailImage || "/images/default-event-image.png"} />
       </Helmet>
-      <h1 className="pl-6 text-8xl font-extrabold drop-shadow-lg text-pink-400 text-center mt-[5rem]">
-        Anime
+      <h1 className="pl-6 text-6xl font-extrabold drop-shadow-lg text-pink-400 text-center mt-[5rem]">
+        {event.name}
       </h1>
-
+      <div className="mt-8">
+        <EventDetailsCard event={event} />
+      </div>
     </div>
   );
 }

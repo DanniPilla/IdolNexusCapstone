@@ -1,14 +1,49 @@
 
 import { Helmet } from "react-helmet-async"; 
-import EventSearchBox from '../components/EventSearchBox'
+import EventSearchBox from '../components/EventSearchBox';
+import EventsGrid from "../components/EventsGrid";
+import useEventSearch from "../hooks/useEventSearch";
+import { useEffect, useState } from "react";
 // save as pages/PostsPage.jsx
 export default function FindEventPage() {
+const { eventsData, loading } = useEventSearch();
+  const [filteredEvents, setFilteredEvents] = useState(eventsData);
+
+  const handleFilterChange = ({ searchTerm, location, dateFilter }) => {
+    let filtered = eventsData;
+
+    // Filter logic
+    if (searchTerm) {
+      filtered = filtered.filter((event) =>
+        event.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    if (location) {
+      filtered = filtered.filter((event) =>
+        event.location?.toLowerCase().includes(location.toLowerCase())
+      );
+    }
+    if (dateFilter === "today") {
+      filtered = filtered.filter((event) => {
+        const eventDate = new Date(event.startDate);
+        const today = new Date();
+        return (
+          eventDate.getDate() === today.getDate() &&
+          eventDate.getMonth() === today.getMonth() &&
+          eventDate.getFullYear() === today.getFullYear()
+        );
+      });
+    }
+
+    setFilteredEvents(filtered);
+  };
+
+  useEffect(() => {
+    setFilteredEvents(eventsData);
+  }, [eventsData]);
 
  return (
-    <div
-      className="w-full min-h-screen  "
-    
-    >
+<div>
        <Helmet>
         <title>Anime Search | Discover Your Favorite Anime</title>
         <meta name="description" content="Find and explore your favorite anime series, characters, and genres. Search and discover anime in an easy and fun way." />
@@ -25,10 +60,27 @@ export default function FindEventPage() {
         <meta name="twitter:description" content="Find and explore your favorite anime series, characters, and genres. Search and discover anime in an easy and fun way." />
         <meta name="twitter:image" content="/images/anime-twitter-image.png" />
       </Helmet>
-      <h1 className="pl-6 text-8xl font-extrabold drop-shadow-lg text-pink-400 text-center mt-[5rem]">
-        Anime
-      </h1>
-<EventSearchBox/>
+      
+<div className="w-full">
+    
+       
+
+      {/* Upcoming Events Section */}
+      <section className="py-16 w-full max-w-6xl mx-auto px-6">
+        <h2 className="text-3xl font-bold text-pink-500 text-center">
+          Find events for you
+        </h2>
+        <p className="text-gray-500 text-center mt-2">
+          These idols can't wait to meet you!
+        </p>
+         <div className=" bg-purple-700 px-8 py-4 rounded-xl shadow-lg text-white mt-6">
+          <EventSearchBox onFilterChange={handleFilterChange} />
+        
+      </div>
+        <EventsGrid events={filteredEvents} loading={loading} />
+      </section>
     </div>
+    </div>
+    
   );
 }

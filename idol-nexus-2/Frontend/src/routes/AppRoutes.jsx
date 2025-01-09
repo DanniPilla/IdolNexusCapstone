@@ -1,7 +1,7 @@
 
 import {Routes, Route} from "react-router-dom"
 import HomePage from "../pages/HomePage";
-import FindEventPage from "../pages/FindEventsPage";
+import FindEventsPage from "../pages/FindEventsPage";
 import CreateEventPage from "../pages/CreateEventsPage";
 import PageNotFound from "../pages/PageNotFound";
 import TicketsPage from "../pages/TicketsPage";
@@ -18,8 +18,9 @@ return (
 <Route index element={<HomePage {...props} />} />
 
 
-<Route path="/findevents" element={<FindEventPage {...props} />}/>
-<Route path="/singleevent" element={<SingleEventPage {...props}/>}/>
+<Route path="/events" element={<FindEventsPage {...props} />}/>
+
+<Route path="/events/:eventId" element={<SingleEventPage {...props}/>}/>
 
 
 

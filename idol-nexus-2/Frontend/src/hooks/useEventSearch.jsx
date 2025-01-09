@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 
 const useEventSearch = () => {
@@ -6,6 +7,7 @@ const useEventSearch = () => {
   const [searchTerm, setSearchTerm] = useState(""); // User input
   const [loading, setLoading] = useState(false); // Loading state
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm); // Debounced search term
+  const [errorMessage, setErrorMessage] = useState(null); // Error message
 
   // Debounce search term to limit frequent re-renders
   useEffect(() => {
@@ -18,20 +20,23 @@ const useEventSearch = () => {
     const fetchEvents = async () => {
       setLoading(true);
       try {
-        const response = await fetch("http://localhost:5000/api/events");
+        const response = await fetch("http://localhost:5000/events");
         if (!response.ok) {
-          console.log("Response Status:", response.status); // Log status code
-          console.log("Response:", await response.text()); // Log raw response text
           throw new Error(`Error: ${response.statusText}`);
         }
 
         const eventDataList = await response.json();
-        setEventsData(eventDataList);
-        setFilteredEvents(eventDataList); // Initialize with all events
-        setLoading(false);
-        console.log("Full Response Data:", eventDataList);
+         const normalisedEvents = eventDataList.map((event) => ({
+        ...event,
+        startDate: event.startDate ? new Date(event.startDate).toISOString() : null, // Ensure ISO 8601 format or null
+      }));
+        setEventsData(normalisedEvents);
+        setFilteredEvents(normalisedEvents); // Initialise with all events
+        setErrorMessage(null); // Clear any previous error
       } catch (error) {
         console.error("Error fetching events:", error);
+        setErrorMessage("Failed to load events. Please try again later.");
+      } finally {
         setLoading(false);
       }
     };
@@ -41,28 +46,19 @@ const useEventSearch = () => {
 
   // Filter events based on debounced search term
   useEffect(() => {
-    const filterEvents = () => {
-      if (!debouncedSearchTerm) {
-        setFilteredEvents(eventsData); // Reset to all events
-        return;
-      }
+    if (loading) return;
 
-      const filtered = eventsData.filter((event) => {
-        return (
-          event.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
-          event.location?.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
-          event.category?.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
-          (event.tags || []).some((tag) =>
-            tag.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
-          )
-        );
-      });
+    const term = debouncedSearchTerm.toLowerCase();
+    const filtered = eventsData.filter((event) => {
+      return (
+        event.name.toLowerCase().includes(term) ||
+        event.location?.toLowerCase().includes(term) ||
+        event.category?.toLowerCase().includes(term)
+      );
+    });
 
-      setFilteredEvents(filtered);
-    };
-
-    filterEvents();
-  }, [debouncedSearchTerm, eventsData]);
+    setFilteredEvents(filtered);
+  }, [debouncedSearchTerm, eventsData, loading]);
 
   return {
     eventsData, // Full event data
@@ -70,6 +66,7 @@ const useEventSearch = () => {
     setSearchTerm, // Function to update the search term
     searchTerm, // Current search term
     loading, // Loading state
+    errorMessage, // Error message
   };
 };
 
