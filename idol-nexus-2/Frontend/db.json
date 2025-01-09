@@ -1,0 +1,26 @@
+{
+  "events": [
+    {
+      "id": 1,
+      "name": "J-Pop Live Concert 2024",
+      "description": "Experience the best of J-Pop with top artists performing live.",
+      "category": "Concert",
+      "organiser_id": 2,
+      "start_date": "2024-03-15T18:00:00.000Z",
+      "end_date": "2024-03-15T21:00:00.000Z",
+      "thumbnailImage": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjbKjIM_Fub6XGLQhYUm5R99K-49NjeThXMQ&s",
+      "location": "Tokyo Dome, Tokyo, Japan"
+    },
+    {
+      "id": 2,
+      "name": "Anime Convention 2024",
+      "description": "Join the ultimate gathering for anime fans.",
+      "category": "Convention",
+      "organiser_id": 3,
+      "start_date": "2024-04-01T09:00:00.000Z",
+      "end_date": "2024-04-03T17:00:00.000Z",
+      "thumbnailImage": "https://kprofiles.com/wp-content/uploads/2024/08/Sato_Miu_November_2022-900x675.webp",
+      "location": "Sydney Opera House, Sydney, Australia"
+    }
+  ]
+}
