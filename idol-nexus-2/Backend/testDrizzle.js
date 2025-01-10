@@ -1,5 +1,5 @@
 import { db } from "./lib/index.js";
-import { venues } from "./db/venueSchema.js"; // Adjust path
+import { venues } from "./db/venueSchema.js";
 
 (async () => {
   try {
