@@ -27,8 +27,7 @@ export const getEventById = async (req, res) => {
 };
 
 export const createEvent = async (req, res) => {
-  const { name, description, category, startDate, endDate, organizerId } =
-    req.body;
+  const { name, description, category, startDate, endDate, userId } = req.body;
   try {
     const newEvent = await db.insert(events).values({
       name,
@@ -36,7 +35,7 @@ export const createEvent = async (req, res) => {
       category,
       startDate,
       endDate,
-      organizerId,
+      userId,
     });
     res.status(201).json({ message: "Event created successfully", newEvent });
   } catch (error) {

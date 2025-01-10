@@ -31,7 +31,7 @@ const useEventSearch = () => {
         startDate: event.startDate ? new Date(event.startDate).toISOString() : null, // Ensure ISO 8601 format or null
       }));
         setEventsData(normalisedEvents);
-        setFilteredEvents(normalisedEvents); // Initialise with all events
+        setFilteredEvents(eventDataList); // Initialise with all events
         setErrorMessage(null); // Clear any previous error
       } catch (error) {
         console.error("Error fetching events:", error);

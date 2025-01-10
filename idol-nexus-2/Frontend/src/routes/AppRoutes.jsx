@@ -7,7 +7,7 @@ import PageNotFound from "../pages/PageNotFound";
 import TicketsPage from "../pages/TicketsPage";
 import LogInPage from "../pages/LogInPage";
 import SignUpPage from "../pages/SignUpPage";
-import SingleEventPage from "../pages/SinglePageEvent";
+import SinglePageEvent from "../pages/SinglePageEvent";
 
 
 function AppRoutes(props) {
@@ -20,7 +20,7 @@ return (
 
 <Route path="/events" element={<FindEventsPage {...props} />}/>
 
-<Route path="/events/:eventId" element={<SingleEventPage {...props}/>}/>
+<Route path="/events/:eventId" element={<SinglePageEvent {...props}/>}/>
 
 
 

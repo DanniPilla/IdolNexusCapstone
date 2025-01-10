@@ -50,6 +50,42 @@ app.get("/api/protected", verifyToken, (req, res) => {
   });
 });
 
+// user login return a session token code
+
+app.post("/api/auth/login", async (req, res) => {
+  const { idToken } = req.body;
+
+  if (!idToken) {
+    return res.status(400).json({ message: "ID Token is required" });
+  }
+
+  try {
+    // Verify the ID token with Firebase Admin SDK
+    const decodedToken = await admin.auth().verifyIdToken(idToken);
+    const firebaseUid = decodedToken.uid;
+
+    // Query your database for the user
+    const user = await db
+      .select()
+      .from(users)
+      .where({ firebase_uid: firebaseUid })
+      .first();
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: "User not found in the database" });
+    }
+
+    // Generate a session token (JWT) or return user data
+    const sessionToken = generateSessionToken(user); // Implement your token generator
+    res.json({ sessionToken, user });
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(401).json({ message: "Unauthorized: Invalid token" });
+  }
+});
+
 app.post("/api/test-login", async (req, res) => {
   try {
     const { email } = req.body;

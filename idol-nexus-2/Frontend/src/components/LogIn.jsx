@@ -1,29 +1,25 @@
 import { useState } from "react";
 import { signInWithEmail, signInWithGoogle } from "../firebase/firebase"; // Auth functions from Firebase setup
-import { Helmet } from "react-helmet-async";
-import ImageCarousel from "../components/ImageCarousel"
 
- const images = [
-    "https://www.j-popproject.com/wp-content/uploads/2021/11/image7-1.jpg",
-    "https://i.pinimg.com/236x/8c/4d/3a/8c4d3a4a4815c1cef6489ca0f0629b43.jpg",
-    "https://static.wikia.nocookie.net/jpop/images/a/a9/Kyotoflavor_Jul2021.jpg/revision/latest?cb=20210802200252"
-  ];
 const LogIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
 
   const handleEmailSignIn = async (e) => {
-    e.preventDefault();
-    try {
-      const user = await signInWithEmail(email, password);
-      console.log("Signed in with email:", user);
-      // Handle successful sign-in 
-    } catch (err) {
-      console.error("Error signing in with email:", err);
-      setError(err.message);
-    }
-  };
+  e.preventDefault();
+  try {
+    const userCredential = await signInWithEmail(email, password);
+    const { user } = userCredential; // Extract Firebase user
+    console.log("Signed in:", user);
+    const idToken = await user.getIdToken(); // Get Firebase token
+    await sendTokenToBackend(idToken); // Send token to the backend
+  } catch (err) {
+    console.error("Error signing in with email:", err);
+    setError(err.message);
+  }
+};
+
 
   const handleGoogleSignIn = async () => {
     try {
@@ -37,26 +33,15 @@ const LogIn = () => {
   };
 
   return (
-  <div className="flex min-h-screen">
-      <Helmet>
-        <title>Sign In | Idol Nexus</title>
-        <meta name="description" content="Sign in to your Idol Nexus account." />
-      </Helmet>
-
-      {/* Left Section - Background Image */}
-      <div className="hidden lg:flex w-full lg:w-1/2 h-screen">
-        <ImageCarousel images={images} />
-      </div>
-
-      {/* Right Section - Form */}
-      <div className="flex flex-col justify-center w-full lg:w-1/2 bg-pink-200 px-8 py-12 lg:px-16 rounded-l-lg">
+      
+      <div className="flex flex-col justify-center w-full lg:w-1/2 px-8 py-12 lg:px-16 rounded-l-lg">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <img
             className="mx-auto h-16 w-auto"
             src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
             alt="Your Company"
           />
-          <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
+          <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-pink-500">
             Welcome back!
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">Sign in to your account</p>
@@ -67,7 +52,7 @@ const LogIn = () => {
           <form className="space-y-6" onSubmit={handleEmailSignIn}>
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-900">
-                Email or phone number
+                Email
               </label>
               <input
                 type="email"
@@ -132,7 +117,7 @@ const LogIn = () => {
           </p>
         </div>
       </div>
-    </div>
+  
   );
 };
 
