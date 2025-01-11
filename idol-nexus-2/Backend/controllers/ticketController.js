@@ -55,7 +55,7 @@ export const getTicketById = async (req, res) => {
     const ticket = await db
       .select()
       .from(tickets)
-      .where(tickets.id.equals(Number(id)))
+      .where(tickets.id === Number(id))
       .limit(1);
     if (ticket.length === 0) {
       return res.status(404).json({ message: "Ticket not found." });

@@ -63,7 +63,7 @@ export const getVenueById = async (req, res) => {
     const venue = await db
       .select()
       .from(venues)
-      .where(venues.id.equals(Number(id)))
+      .where(venues.id === Number(id))
       .limit(1);
 
     if (venue.length === 0) {
@@ -83,7 +83,7 @@ export const getVenuesByCity = async (req, res) => {
     const venuesInCity = await db
       .select()
       .from(venues)
-      .where(venues.city.equals(city));
+      .where(venues.city === city);
 
     res.json(venuesInCity);
   } catch (error) {
@@ -109,7 +109,7 @@ export const updateVenue = async (req, res) => {
         postal_code: postalCode || undefined,
         capacity: capacity || undefined,
       })
-      .where(venues.id.equals(Number(id)));
+      .where(venues.id === Number(id));
 
     if (updatedVenue.rowCount === 0) {
       return res.status(404).json({ message: "Venue not found." });
@@ -129,7 +129,7 @@ export const deleteVenue = async (req, res) => {
     const deletedVenue = await db
       .delete()
       .from(venues)
-      .where(venues.id.equals(Number(id)));
+      .where(venues.id === Number(id));
 
     if (deletedVenue.rowCount === 0) {
       return res.status(404).json({ message: "Venue not found." });
@@ -148,7 +148,7 @@ export const getVenuesByCapacity = async (req, res) => {
     const venuesByCapacity = await db
       .select()
       .from(venues)
-      .where(venues.capacity.gte(Number(minCapacity)));
+      .where(venues.capacity.get(Number(minCapacity)));
 
     res.json(venuesByCapacity);
   } catch (error) {

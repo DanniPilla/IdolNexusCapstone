@@ -69,12 +69,12 @@ export const getEventsWithVenues = async (req, res) => {
 };
 
 export const getEventById = async (req, res) => {
-  const { id } = req.params;
+  const id = req.params;
   try {
     const event = await db
       .select()
       .from(events)
-      .where(events.id.equals(Number(id)));
+      .where(events.id === Number(id));
     if (event.length === 0) {
       return res.status(404).json({ message: "Event not found" });
     }

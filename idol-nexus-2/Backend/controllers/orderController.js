@@ -16,7 +16,7 @@ export const getOrderById = async (req, res) => {
     const order = await db
       .select()
       .from(orders)
-      .where(orders.id.equals(Number(id)));
+      .where(orders.id === Number(id));
     if (!entry.length) {
       return res.status(404).json({ message: "order not found" });
     }
@@ -45,7 +45,7 @@ export const updateOrder = async (req, res) => {
     const updated = await db
       .update(orders)
       .set({ ticketId, userId, totalAmount, quantity })
-      .where(orders.id.equals(Number(id)));
+      .where(orders.id === Number(id));
     res.json({ message: "orders updated", updated });
   } catch (error) {
     res.status(500).json({ message: "Error updating order", error });
@@ -55,7 +55,7 @@ export const updateOrder = async (req, res) => {
 export const deleteOrder = async (req, res) => {
   const { id } = req.params;
   try {
-    await db.delete(orders).where(orders.id.equals(Number(id)));
+    await db.delete(orders).where(orders.id === Number(id));
     res.json({ message: "order deleted" });
   } catch (error) {
     res.status(500).json({ message: "Error deleting order", error });

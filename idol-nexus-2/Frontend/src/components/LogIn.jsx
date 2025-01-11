@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { signInWithEmail, signInWithGoogle } from "../firebase/firebase"; // Auth functions from Firebase setup
-
+import { auth } from "../firebase/firebase"; 
 const LogIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -11,17 +11,21 @@ const LogIn = () => {
     try {
       const userCredential = await signInWithEmail(email, password);
       const idToken = await userCredential.getIdToken(); // Get Firebase token
-
+console.log({token: idToken})
       // Send ID token to backend
       const response = await fetch("http://localhost:5000/api/users/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ idToken }),
+        
+
+        // body:{token: idToken}
+        body: JSON.stringify({token: idToken, auth: auth }),
       });
 
-      const data = await response.json();
+      const data = await response.json()
+    console.log(response.ok)
 
       if (!response.ok) {
         throw new Error(data.error || "Login failed");

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom"; 
 import EventDetailsCard from "../components/EventDetailsCard";
 
-export default function SinglePageEvent() {
+export default function SinglePage() {
   const { eventId } = useParams(); // Extract the event ID from the URL
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -12,7 +12,7 @@ export default function SinglePageEvent() {
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/events/${eventId}`);
+        const response = await fetch(`http://localhost:5000/api/events/${eventId}`);
         console.log(response)
         if (!response.ok) {
           throw new Error("Failed to fetch event details");

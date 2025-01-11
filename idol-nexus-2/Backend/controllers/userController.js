@@ -16,7 +16,7 @@ export const registerUser = async (req, res) => {
     const existingUser = await db
       .select()
       .from(users)
-      .where(users.email.equals(email))
+      .where(users.email === email)
       .limit(1);
 
     if (existingUser.length > 0) {
@@ -49,7 +49,9 @@ export const registerUser = async (req, res) => {
 
 // User login/
 export const loginUser = async (req, res) => {
-  const { idToken } = req.body;
+  console.log(req.body);
+  const auth = req.body.auth;
+  const idToken = req.body.token;
 
   if (!idToken) {
     return res.status(400).json({ error: "ID Token is required" });
@@ -57,14 +59,14 @@ export const loginUser = async (req, res) => {
 
   try {
     // Verify Firebase ID Token
-    const decodedToken = await auth.verifyIdToken(idToken);
+    const decodedToken = await firebaseAuth.verifyIdToken(idToken);
     const { uid: firebaseUid } = decodedToken;
 
     // Check if the user exists in the database
     const [user] = await db
       .select()
       .from(users)
-      .where(users.firebase_uid.equals(firebaseUid));
+      .where(users.firebase_uid === firebaseUid);
 
     if (!user) {
       return res.status(404).json({ error: "User not found in the database" });
@@ -88,7 +90,7 @@ export const handleFirebaseSignIn = async (req, res) => {
     let user = await db
       .select()
       .from(users)
-      .where(users.firebase_uid.equals(uid))
+      .where(users.firebase_uid === uid)
       .limit(1);
 
     if (user.length === 0) {
@@ -124,7 +126,7 @@ export const getUserById = async (req, res) => {
     const user = await db
       .select()
       .from(users)
-      .where(users.id.equals(Number(id)));
+      .where(users.id === Number(id));
     if (!user.length) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -162,7 +164,7 @@ export const createUser = async (req, res) => {
     const existingUser = await db
       .select()
       .from(users)
-      .where(users.firebase_uid.equals(firebaseUid))
+      .where(users.firebase_uid === firebaseUid)
       .limit(1);
 
     if (existingUser.length > 0) {
@@ -203,7 +205,7 @@ export const updateUser = async (req, res) => {
     const existingUser = await db
       .select()
       .from(users)
-      .where(users.firebaseUid.equals(firebaseUid));
+      .where(users.firebase_uid === firebaseUid);
 
     if (existingUser.length === 0) {
       return res.status(200).json({ message: "User does not exist" });
@@ -222,7 +224,7 @@ export const updateUser = async (req, res) => {
         profilePicture: profilePicture || existingUser[0].profilePicture,
         role: role || existingUser[0].role,
       })
-      .where(users.firebaseUid.equals(firebaseUid));
+      .where(users.firebase_uid === firebaseUid);
 
     res.status(201).json({ message: "User updated successfully", updatedUser });
   } catch (error) {
@@ -257,7 +259,7 @@ export const deleteUser = async (req, res) => {
     await db
       .update(users)
       .set({ isActive: false })
-      .where(users.firebaseUid.equals(firebaseUid));
+      .where(users.firebase_uid === firebaseUid);
 
     res
       .status(200)
