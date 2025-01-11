@@ -49,27 +49,31 @@ export const registerUser = async (req, res) => {
 
 // User login/
 export const loginUser = async (req, res) => {
-  const { email, password } = req.body;
+  const { idToken } = req.body;
+
+  if (!idToken) {
+    return res.status(400).json({ error: "ID Token is required" });
+  }
 
   try {
-    // Find the user
-    const user = await db
+    // Verify Firebase ID Token
+    const decodedToken = await auth.verifyIdToken(idToken);
+    const { uid: firebaseUid } = decodedToken;
+
+    // Check if the user exists in the database
+    const [user] = await db
       .select()
       .from(users)
-      .where(users.email.equals(email))
-      .limit(1);
+      .where(users.firebase_uid.equals(firebaseUid));
 
-    if (user.length === 0) {
-      return res.status(404).json({ error: "User not found" });
+    if (!user) {
+      return res.status(404).json({ error: "User not found in the database" });
     }
 
-    // Verify the password
-    const passwordMatch = await verifyPassword(password, user[0].password);
-    if (!passwordMatch) {
-      return res.status(401).json({ error: "Invalid password" });
-    }
-
-    res.status(200).json({ message: "Login successful", user: user[0] });
+    res.status(200).json({
+      message: "Login successful",
+      user,
+    });
   } catch (error) {
     console.error("Error logging in user:", error);
     res.status(500).json({ error: "Internal server error" });

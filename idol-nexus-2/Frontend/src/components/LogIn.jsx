@@ -6,19 +6,34 @@ const LogIn = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
 
-  const handleEmailSignIn = async (e) => {
-  e.preventDefault();
-  try {
-    const userCredential = await signInWithEmail(email, password);
-    const { user } = userCredential; // Extract Firebase user
-    console.log("Signed in:", user);
-    const idToken = await user.getIdToken(); // Get Firebase token
-    await sendTokenToBackend(idToken); // Send token to the backend
-  } catch (err) {
-    console.error("Error signing in with email:", err);
-    setError(err.message);
-  }
-};
+   const handleEmailSignIn = async (e) => {
+    e.preventDefault();
+    try {
+      const userCredential = await signInWithEmail(email, password);
+      const idToken = await userCredential.getIdToken(); // Get Firebase token
+
+      // Send ID token to backend
+      const response = await fetch("http://localhost:5000/api/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ idToken }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Login failed");
+      }
+
+      console.log("Login successful:", data);
+      // Handle success (e.g., store user in context/state)
+    } catch (err) {
+      console.error("Error logging in:", err);
+      setError(err.message);
+    }
+  };
 
 
   const handleGoogleSignIn = async () => {
@@ -94,7 +109,7 @@ const LogIn = () => {
               </button>
             </div>
           </form>
-
+{error && <p>{error}</p>}
           <div className="mt-8">
             <button
               onClick={handleGoogleSignIn}

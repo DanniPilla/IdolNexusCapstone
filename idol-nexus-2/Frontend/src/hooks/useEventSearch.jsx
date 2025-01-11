@@ -20,7 +20,7 @@ const useEventSearch = () => {
     const fetchEvents = async () => {
       setLoading(true);
       try {
-        const response = await fetch("http://localhost:5000/events");
+        const response = await fetch("http://localhost:5000/api/events");
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`);
         }

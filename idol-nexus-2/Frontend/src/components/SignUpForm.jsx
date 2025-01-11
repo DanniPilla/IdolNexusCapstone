@@ -1,5 +1,46 @@
 
-export default function SignUpForm() {
+  const SignUpForm = () => {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    firstName: "",
+    lastName: "",
+    profilePicture: null,
+  });
+  const [error, setError] = useState(null);
+
+  const handleInputChange = (e) => {
+    const { name, value, files } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: files ? files[0] : value,
+    }));
+  };
+
+  const handleSignUp = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("http://localhost:5000/api/users/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Registration failed");
+      }
+
+      console.log("Registration successful:", data);
+      // Handle success (e.g., redirect to login)
+    } catch (err) {
+      console.error("Error registering user:", err);
+      setError(err.message);
+    }
+  };
   return (
 <div className="bg-white shadow-lg rounded-lg p-6 sm:p-8 w-full max-w-2xl lg:w-1/2">
         <h1 className="text-3xl font-bold text-center text-purple-500 mb-4">
@@ -9,7 +50,7 @@ export default function SignUpForm() {
           Join Idol Nexus and connect with your favorite local Idols!
         </p>
 
-        <form className="space-y-6" action="/api/users/register" method="POST">
+        <form onSubmit={handleSignUp} className="space-y-6" action="/api/users/register" method="POST">
           {/* Email Address */}
           <div> 
             <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">
@@ -137,7 +178,9 @@ export default function SignUpForm() {
           >
             Sign Up
           </button>
+          {error && <p>{error}</p>}
         </form>
       </div>
 
   )}
+  export default SignUpForm;
