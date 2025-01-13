@@ -48,7 +48,7 @@ export const registerUser = async (req, res) => {
 
 // User login
 export const loginUser = async (req, res) => {
-  const idToken = req.body.token;
+  const { token: idToken } = req.body;
 
   if (!idToken) {
     return res.status(400).json({ error: "ID Token is required" });
@@ -57,25 +57,28 @@ export const loginUser = async (req, res) => {
   try {
     // Verify Firebase ID Token
     const decodedToken = await firebaseAuth.verifyIdToken(idToken);
-    const { uid: firebaseUid } = decodedToken;
+    const firebaseUid = decodedToken.uid;
+    console.log("Decoded Firebase UID:", firebaseUid);
 
-    // Check if the user exists in the database
+    // Fetch user from database
     const [user] = await db
       .select()
       .from(users)
-      .where(users.firebase_uid === firebaseUid);
+      .where("firebase_uid", firebaseUid);
 
     if (!user) {
       return res.status(404).json({ error: "User not found in the database" });
     }
 
-    res.status(200).json({
+    console.log("Fetched user:", user);
+
+    return res.status(200).json({
       message: "Login successful",
       user,
     });
   } catch (error) {
     console.error("Error logging in user:", error);
-    res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
 

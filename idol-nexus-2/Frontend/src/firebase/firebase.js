@@ -21,12 +21,17 @@ export const auth = getAuth(app);
 
 // Sign-in methods
 export const signInWithEmail = async (email, password) => {
-  const userCredential = await signInWithEmailAndPassword(
-    auth,
-    email,
-    password
-  );
-  return userCredential.user; // Returns the authenticated user
+  try {
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    return userCredential.user; // Returns the authenticated user
+  } catch (error) {
+    console.error("Error in signInWithEmail:", error.message);
+    throw error; // Rethrow the error for handling in the calling function
+  }
 };
 
 export const signInWithGoogle = async () => {
