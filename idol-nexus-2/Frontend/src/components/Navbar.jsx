@@ -1,14 +1,21 @@
 import { NavLink } from 'react-router-dom'
 import { Heart, House, Ticket, Search, LogIn, Plus, ClipboardPen } from "lucide-react"
+import { useUser } from "../context/UserContext";
 
 export default function NavBar() {
+   const { user } = useUser();
   return (
     <nav 
       className="NavBar sticky top-0 w-full flex justify-between items-center shadow-md z-50">
       <div className="pl-6 text-2xl font-extrabold text-pink-600 drop-shadow-lg">
         <p>
-          <span className="text-white">Idol</span>
-          <span className="text-white font-normal">Nexus</span>
+          <span className="text-white ">Idol</span>
+          <span className="text-white font-normal  ">Nexus</span>
+          <img
+            className="absolute -top-2 -right-11 h-12 w-auto rotate-45 z-0 "
+            src="light-stick (2).png"
+          />
+      
         </p>
       </div>
       <ul className="flex justify-center space-x-4 py-4">
@@ -48,6 +55,14 @@ export default function NavBar() {
             Tickets
           </span>
         </li>
+        {user ? (
+          <li className="relative group">
+            <span className="hidden sm:inline px-4 uppercase font-bold text-white hover:text-purple-700">
+              Welcome, {user.displayName || "User"}
+            </span>
+          </li>
+        ) : (
+          <>
         <li className="relative group">
           <NavLink to="/login" className="px-4 uppercase font-bold text-white hover:text-purple-700">
             <LogIn className="text-lg sm:hidden" />
@@ -66,6 +81,8 @@ export default function NavBar() {
             Sign Up
           </span>
         </li>
+        </>
+        )}
       </ul>
     </nav>
   )

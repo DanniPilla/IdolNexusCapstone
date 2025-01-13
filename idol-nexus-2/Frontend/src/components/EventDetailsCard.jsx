@@ -1,6 +1,7 @@
 const EventDetailsCard = ({ event }) => {
   const startDate = event.startDate ? new Date(event.startDate) : null;
   const endDate = event.endDate ? new Date(event.endDate) : null;
+
   return (
     <div className="bg-white">
       <div className="pt-6">
@@ -24,28 +25,24 @@ const EventDetailsCard = ({ event }) => {
         {/* Event Details */}
         <div className="mt-8 px-4">
           <p className="text-gray-700">{event.description}</p>
-
-          {startDate && !isNaN(startDate) ? (
-          <p className="text-gray-500 mt-4">
-            Start: {startDate.toLocaleString()}
-          </p>
-          ) : (
+          {startDate && (
             <p className="text-gray-500 mt-4">
-            Start date is not available
-          </p>
+              Start: {startDate.toLocaleString()}
+            </p>
           )}
-
-           {endDate && !isNaN(endDate) ? (
-          <p className="text-gray-500">
-            End: {endDate.toLocaleString()}
+          {endDate && (
+            <p className="text-gray-500">
+              End: {endDate.toLocaleString()}
+            </p>
+          )}
+          <p className="text-gray-500 mt-2">
+            Ticket Price: {event.ticketPrice ? `$${event.ticketPrice}` : "Free"}
           </p>
-           ) : (
-            <p className="text-gray-500">End date is not available</p>
-
-           )}
-           
-          {event.location && (
-            <p className="text-gray-500 mt-2">Location: {event.location}</p>
+          {event.venueName && (
+            <p className="text-gray-500 mt-2">
+              Venue: {event.venueName}, {event.venueAddress}, {event.venueCity},{" "}
+              {event.venueCountry}
+            </p>
           )}
           {event.virtualLink && (
             <p className="text-gray-500 mt-2">

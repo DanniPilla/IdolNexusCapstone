@@ -9,7 +9,6 @@ import userRoutes from "./routes/userRoutes.js";
 import ticketRoutes from "./routes/ticketRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
-import venueRoutes from "./routes/venueRoutes.js";
 import calendarRoutes from "./routes/calendarRoutes.js";
 import { verifyToken } from "./middlewares/authMiddleware.js";
 
@@ -131,7 +130,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/tickets", ticketRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/payments", paymentRoutes);
-app.use("/api/venues", venueRoutes);
+
 app.use("/api/calendars", calendarRoutes);
 
 // Start the server

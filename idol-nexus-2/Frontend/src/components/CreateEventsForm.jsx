@@ -1,11 +1,11 @@
 import { useState } from "react";
-  const SignUpForm = () => {
+  const CreateEventsForm = () => {
   const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    firstName: "",
-    lastName: "",
-    profilePicture: null,
+    name: "",
+    description: "",
+    category: "",
+    startDate: "",
+    endDate: "",
   });
   const [error, setError] = useState(null);
 
@@ -51,13 +51,13 @@ import { useState } from "react";
   return (
 <div className="bg-white shadow-lg rounded-lg p-6 sm:p-8 w-full max-w-2xl lg:w-1/2">
         <h1 className="text-3xl font-bold text-center text-purple-500 mb-4">
-          Create Your Account
+          Create an Event!
         </h1>
         <p className="text-center text-gray-600 mb-6">
           Join Idol Nexus and connect with your favorite local Idols!
         </p>
 
-        <form onSubmit={handleSignUp} className="space-y-6" action="/api/users/register" method="POST">
+        <form onSubmit={handleSignUp} className="space-y-6" action="/api/events/register" method="POST">
           {/* Email Address */}
           <div> 
             <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">
@@ -190,4 +190,4 @@ import { useState } from "react";
       </div>
 
   )}
-  export default SignUpForm;
+  export default CreateEventsForm;

@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import ImageCarousel from "../components/ImageCarousel";
 import EventSearchBox from "../components/EventSearchBox";
 import EventsGrid from "../components/EventsGrid";
@@ -11,41 +10,7 @@ export default function HomePage() {
     "https://scontent.fbne6-1.fna.fbcdn.net/v/t39.30808-6/334943177_598247811824239_1474274488831979670_n.jpg",
   ];
 
-  const { eventsData, loading } = useEventSearch();
-  const [filteredEvents, setFilteredEvents] = useState(eventsData);
-
-  const handleFilterChange = ({ searchTerm, location, dateFilter }) => {
-    let filtered = eventsData;
-
-    // Filter logic
-    if (searchTerm) {
-      filtered = filtered.filter((event) =>
-        event.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-    if (location) {
-      filtered = filtered.filter((event) =>
-        event.location?.toLowerCase().includes(location.toLowerCase())
-      );
-    }
-    if (dateFilter === "today") {
-      filtered = filtered.filter((event) => {
-        const eventDate = new Date(event.startDate);
-        const today = new Date();
-        return (
-          eventDate.getDate() === today.getDate() &&
-          eventDate.getMonth() === today.getMonth() &&
-          eventDate.getFullYear() === today.getFullYear()
-        );
-      });
-    }
-
-    setFilteredEvents(filtered);
-  };
-
-  useEffect(() => {
-    setFilteredEvents(eventsData);
-  }, [eventsData]);
+  const { filteredEvents, loading, updateFilters } = useEventSearch();
 
   return (
     <div className="w-full">
@@ -53,7 +18,7 @@ export default function HomePage() {
       <div className="relative">
         <ImageCarousel images={images} />
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-purple-700 px-8 py-4 rounded-xl shadow-lg text-white w-3/4 md:w-2/3">
-          <EventSearchBox onFilterChange={handleFilterChange} />
+          <EventSearchBox onFilterChange={updateFilters} />
         </div>
       </div>
 

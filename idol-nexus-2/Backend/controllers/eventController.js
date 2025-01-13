@@ -1,15 +1,5 @@
 import { db } from "../lib/index.js";
 import { events } from "../db/eventSchema.js";
-import { venues } from "../db/venueSchema.js";
-
-// export const getAllEvents = async (req, res) => {
-//   try {
-//     const allEvents = await db.select().from(events);
-//     res.json(allEvents);
-//   } catch (error) {
-//     res.status(500).json({ message: "Error fetching events", error });
-//   }
-// };
 
 export const getAllEvents = async (req, res) => {
   try {
@@ -25,44 +15,6 @@ export const getAllEvents = async (req, res) => {
     console.error("Error fetching events:", error);
     res.status(500).json({
       message: "Error fetching events",
-      error: error.message || error,
-    });
-  }
-};
-
-export const getEventsWithVenues = async (req, res) => {
-  console.log("getEventsWithVenues endpoint hit"); // Debug log
-  try {
-    const query = db
-      .select({
-        eventId: events.id,
-        eventName: events.name,
-        eventCategory: events.category,
-        startDate: events.startDate,
-        endDate: events.endDate,
-        venueId: venues.id,
-        venueName: venues.name,
-        venueCity: venues.city,
-        venueState: venues.state,
-        venueCountry: venues.country,
-        venueCapacity: venues.capacity,
-      })
-      .from(events)
-      .leftJoin(venues, events.venueId.eq(venues.id));
-
-    console.log("Generated Query:", query.toSQL()); // Log query generation
-
-    const eventsWithVenues = await query;
-
-    if (eventsWithVenues.length === 0) {
-      return res.status(404).json({ message: "No events found with venues" });
-    }
-
-    res.json(eventsWithVenues);
-  } catch (error) {
-    console.error("Error fetching events with venues:", error);
-    res.status(500).json({
-      message: "Error fetching events with venues",
       error: error.message || error,
     });
   }
@@ -115,7 +67,7 @@ export const updateEvent = async (req, res) => {
         endDate,
         venueId,
       })
-      .where(events.id.equals(Number(id)));
+      .where(events.id === Number(id));
     res.json({ message: "Event updated successfully", updated });
   } catch (error) {
     res.status(500).json({ message: "Error updating event", error });
@@ -125,7 +77,7 @@ export const updateEvent = async (req, res) => {
 export const deleteEvent = async (req, res) => {
   const { id } = req.params;
   try {
-    await db.delete(events).where(events.id.equals(Number(id)));
+    await db.delete(events).where(events.id === Number(id));
     res.json({ message: "Event deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: "Error deleting event", error });

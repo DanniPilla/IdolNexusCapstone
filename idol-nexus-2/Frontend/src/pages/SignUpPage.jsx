@@ -10,7 +10,7 @@ export default function SignUpPage() {
   ];
 
   return (
-    <div className="w-full min-h-screen flex flex-col lg:flex-row items-center bg-gradient-to-r from-pink-50 via-purple-50 to-blue-50">
+    <div className="w-full min-h-screen flex flex-col lg:flex-row items-center">
       {/* Helmet Meta Tags */}
       <Helmet>
         <title>Sign Up | Idol Nexus</title>
@@ -21,7 +21,7 @@ export default function SignUpPage() {
       </Helmet>
 
       {/* Left Section - Image Carousel */}
-      <div className="hidden lg:flex w-full lg:w-1/2 bg-gray-100">
+      <div className="hidden lg:flex w-full lg:w-1/2 ">
         <ImageCarousel images={images} />
       </div>
 

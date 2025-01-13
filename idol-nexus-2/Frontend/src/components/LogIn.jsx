@@ -1,17 +1,21 @@
 import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom"; // Import useNavigate
 import { signInWithEmail, signInWithGoogle } from "../firebase/firebase"; // Auth functions from Firebase setup
 import { auth } from "../firebase/firebase"; 
+import { useUser } from "../context/UserContext";
 const LogIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const { setUser } = useUser();
+    const navigate = useNavigate();
 
    const handleEmailSignIn = async (e) => {
     e.preventDefault();
     try {
       const userCredential = await signInWithEmail(email, password);
       const idToken = await userCredential.getIdToken(); // Get Firebase token
-console.log({token: idToken})
+
       // Send ID token to backend
       const response = await fetch("http://localhost:5000/api/users/login", {
         method: "POST",
@@ -32,6 +36,8 @@ console.log({token: idToken})
       }
 
       console.log("Login successful:", data);
+    setUser(data.user);
+       navigate("/");
       // Handle success (e.g., store user in context/state)
     } catch (err) {
       console.error("Error logging in:", err);
@@ -56,9 +62,9 @@ console.log({token: idToken})
       <div className="flex flex-col justify-center w-full lg:w-1/2 px-8 py-12 lg:px-16 rounded-l-lg">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <img
-            className="mx-auto h-16 w-auto"
-            src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
-            alt="Your Company"
+            className="mx-auto h-20 w-auto rotate-45"
+            src="light-stick (2).png"
+            alt="Idol nexus"
           />
           <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-pink-500">
             Welcome back!
@@ -130,9 +136,9 @@ console.log({token: idToken})
 
           <p className="mt-6 text-center text-sm text-gray-500">
             Don’t have an account?{" "}
-            <a href="#" className="text-indigo-600 hover:underline">
+            <Link to="/signup" className="text-indigo-600 hover:underline">
               Sign up now
-            </a>
+            </Link>
           </p>
         </div>
       </div>

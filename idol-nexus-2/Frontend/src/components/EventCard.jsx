@@ -5,8 +5,9 @@ import { MapPin } from "lucide-react";
 const EventCard = ({ event }) => {
   return (
     <Link
-      to={`/events/${event.id}`} // Navigate to the specific event's page using its ID
+      to={`/events/${event.id}`} 
       className="block bg-white rounded-lg shadow-md transition-transform transform hover:scale-105 hover:shadow-lg overflow-hidden"
+    
     >
       <div className="relative">
         {/* Image Section */}
@@ -32,14 +33,14 @@ const EventCard = ({ event }) => {
       <div className="p-4">
         <h2 className="text-lg font-bold text-gray-800 mb-1">{event.name}</h2>
         <p className="text-sm text-indigo-500 mb-3 flex items-center gap-1">
-          <MapPin/>
-          {event.location}</p>
+          <MapPin />
+          {event.venueName || "Online"}
+        </p>
         <div className="flex items-center justify-between">
           <p className="text-pink-500 font-semibold flex items-center gap-1">
-             <BadgeDollarSign />
-            {event.price ? `$${event.price}` : "Free"}
+            <BadgeDollarSign />
+            {event.ticketPrice ? `$${event.ticketPrice}` : "Free"}
           </p>
-         
         </div>
       </div>
     </Link>

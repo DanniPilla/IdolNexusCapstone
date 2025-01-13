@@ -1,37 +1,26 @@
-import { useSearchParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const EventSearchBox = ({ onFilterChange }) => {
-  const [searchParams, setSearchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState("");
-  const [location, setLocation] = useState("");
+  const [city, setCity] = useState("");
   const [dateFilter, setDateFilter] = useState("");
-
-  // Initialize searchTerm from URL params on first render only
-  useEffect(() => {
-    const query = searchParams.get("query") || "";
-    setSearchTerm(query);
-    onFilterChange({ searchTerm: query, location, dateFilter });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Run only once on component mount
 
   const handleSearchChange = (e) => {
     const value = e.target.value;
-    setSearchTerm(value); // Update searchTerm state
-    setSearchParams({ query: value }); // Update URL
-    onFilterChange({ searchTerm: value, location, dateFilter }); // Notify parent
+    setSearchTerm(value); // Update search term state
+    onFilterChange({ searchTerm: value, location: city, dateFilter }); // Notify parent
   };
 
-  const handleLocationChange = (e) => {
+  const handleCityChange = (e) => {
     const value = e.target.value;
-    setLocation(value);
-    onFilterChange({ searchTerm, location: value, dateFilter });
+    setCity(value); // Update city state
+    onFilterChange({ searchTerm, location: value, dateFilter }); // Notify parent
   };
 
   const handleDateChange = (e) => {
     const value = e.target.value;
-    setDateFilter(value);
-    onFilterChange({ searchTerm, location, dateFilter: value });
+    setDateFilter(value); // Update date filter state
+    onFilterChange({ searchTerm, location: city, dateFilter: value }); // Notify parent
   };
 
   return (
@@ -45,9 +34,9 @@ const EventSearchBox = ({ onFilterChange }) => {
       />
       <input
         type="text"
-        value={location}
-        onChange={handleLocationChange}
-        placeholder="Location"
+        value={city}
+        onChange={handleCityChange}
+        placeholder="City"
         className="flex-grow bg-transparent border-b-2 border-white rounded-xl px-4 py-2 placeholder-white focus:outline-none"
       />
       <select
