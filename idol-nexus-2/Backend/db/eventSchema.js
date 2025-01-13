@@ -4,37 +4,37 @@ import {
   varchar,
   text,
   timestamp,
-  numeric,
   integer,
-  json,
+  decimal,
+  index,
 } from "drizzle-orm/pg-core";
 
-import { users } from "./userSchema.js";
-
-export const events = pgTable("events", {
-  id: serial("id").primaryKey(),
-
-  // Event Details
-  name: varchar("name", { length: 255 }).notNull(),
-  description: text("description"),
-  category: varchar("category", { length: 50 }).notNull(),
-  tags: json("tags").default([]),
-
-  organizerId: integer("organizer_id")
-    .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
-
-  startDate: timestamp("start_date").notNull(),
-  endDate: timestamp("end_date").notNull(),
-  status: varchar("status", { length: 20 }).notNull().default("upcoming"),
-
-  location: varchar("location", { length: 255 }),
-  virtualLink: text("virtual_link"), // For online events
-
-  capacity: integer("capacity").default(0), // Max attendees
-
-  thumbnailImage: text("thumbnail_image"), // URL to event thumbnail
-
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
-});
+export const events = pgTable(
+  "events",
+  {
+    id: serial("id").primaryKey(),
+    name: varchar("name", { length: 255 }).notNull(),
+    description: text("description"),
+    category: varchar("category", { length: 50 }).notNull(),
+    startDate: timestamp("start_date").notNull(),
+    endDate: timestamp("end_date").notNull(),
+    virtualLink: text("virtual_link"),
+    capacity: integer("capacity").default(0),
+    thumbnailImage: text("thumbnail_image"),
+    ticketPrice: decimal("ticket_price", { precision: 10, scale: 2 }).default(
+      0.0
+    ), // Ticket price field
+    venueName: varchar("venue_name", { length: 255 }), // Venue name
+    venueAddress: text("venue_address"), // Venue address
+    venueCity: varchar("venue_city", { length: 100 }), // Venue city
+    venueCountry: varchar("venue_country", { length: 100 }), // Venue country
+    userId: integer("user_id").notNull(), // Foreign key for user
+    createdAt: timestamp("created_at").defaultNow(),
+    updatedAt: timestamp("updated_at").defaultNow(),
+  },
+  (events) => ({
+    startDateIndex: index("idx_events_start_date").on(events.startDate),
+    categoryIndex: index("idx_events_category").on(events.category),
+    userIdIndex: index("idx_events_user_id").on(events.userId), // Index for userId
+  })
+);

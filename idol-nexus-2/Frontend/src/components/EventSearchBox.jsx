@@ -1,59 +1,54 @@
-import { useSearchParams } from "react-router-dom";
-import { Search } from "lucide-react";
-import useEventSearch from "../hooks/useEventSearch";
-import EventCard from "./EventCard";
-import SkeletonCard from "./SkeletonCard";
+import { useState } from "react";
 
-const EventSearchBox = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const { eventsData, setSearchTerm, searchTerm, loading } = useEventSearch();
+const EventSearchBox = ({ onFilterChange }) => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [city, setCity] = useState("");
+  const [dateFilter, setDateFilter] = useState("");
 
-  // Initialize searchTerm from URL params (if available)
-  useEffect(() => {
-    const query = searchParams.get("query") || "";
-    setSearchTerm(query);
-  }, [searchParams, setSearchTerm]);
-
-  // Skeleton array for loading state
-  const skeletonArray = Array.from({ length: 10 }, (_, i) => i);
-
-  // Handle search term changes and update URL params
   const handleSearchChange = (e) => {
     const value = e.target.value;
-    setSearchTerm(value);
-    setSearchParams({ query: value });
+    setSearchTerm(value); // Update search term state
+    onFilterChange({ searchTerm: value, location: city, dateFilter }); // Notify parent
+  };
+
+  const handleCityChange = (e) => {
+    const value = e.target.value;
+    setCity(value); // Update city state
+    onFilterChange({ searchTerm, location: value, dateFilter }); // Notify parent
+  };
+
+  const handleDateChange = (e) => {
+    const value = e.target.value;
+    setDateFilter(value); // Update date filter state
+    onFilterChange({ searchTerm, location: city, dateFilter: value }); // Notify parent
   };
 
   return (
-    <div className="p-4">
-      {/* Search Box */}
-      <div className="flex justify-center space-x-4 mb-6">
-        <div className="relative max-w-md">
-          <Search className="absolute left-3 top-1/3 transform -translate-y-1/2 text-gray-500" />
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={handleSearchChange}
-            className="w-full pl-10 p-2 border border-gray-300 rounded text-black"
-            placeholder="Search events..."
-          />
-        </div>
-      </div>
-
-      {/* Events Grid */}
-      <div className="mx-14 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-7 items-center">
-        {loading
-          ? skeletonArray.map((_, index) => <SkeletonCard key={index} />)
-          : eventsData.length > 0
-          ? eventsData.map((event) => (
-              <EventCard key={event.id || event._id} events={event} />
-            ))
-          : (
-            <p className="text-center col-span-full">
-              Sorry, there isn't an event that matches your search.
-            </p>
-          )}
-      </div>
+    <div className="flex flex-wrap gap-4">
+      <input
+        type="text"
+        value={searchTerm}
+        onChange={handleSearchChange}
+        placeholder="Search Event"
+        className="flex-grow bg-transparent border-b-2 border-white rounded-xl px-4 py-2 placeholder-white focus:outline-none"
+      />
+      <input
+        type="text"
+        value={city}
+        onChange={handleCityChange}
+        placeholder="City"
+        className="flex-grow bg-transparent border-b-2 border-white rounded-xl px-4 py-2 placeholder-white focus:outline-none"
+      />
+      <select
+        value={dateFilter}
+        onChange={handleDateChange}
+        className="bg-transparent border-b-2 border-white rounded-xl px-4 py-2 placeholder-white text-white focus:outline-none"
+      >
+        <option value="">Any Date</option>
+        <option value="today">Today</option>
+        <option value="this_week">This Week</option>
+        <option value="this_month">This Month</option>
+      </select>
     </div>
   );
 };

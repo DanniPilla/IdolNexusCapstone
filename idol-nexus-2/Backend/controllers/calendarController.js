@@ -16,7 +16,7 @@ export const getCalendarById = async (req, res) => {
     const entry = await db
       .select()
       .from(calendar)
-      .where(calendar.id.equals(Number(id)));
+      .where(calendar.id === Number(id));
     if (!entry.length) {
       return res.status(404).json({ message: "Calendar entry not found" });
     }
@@ -43,7 +43,7 @@ export const updateCalendar = async (req, res) => {
     const updated = await db
       .update(calendar)
       .set({ eventId, userId })
-      .where(calendar.id.equals(Number(id)));
+      .where(calendar.id === Number(id));
     res.json({ message: "Calendar entry updated", updated });
   } catch (error) {
     res.status(500).json({ message: "Error updating calendar entry", error });
@@ -53,7 +53,7 @@ export const updateCalendar = async (req, res) => {
 export const deleteCalendar = async (req, res) => {
   const { id } = req.params;
   try {
-    await db.delete(calendar).where(calendar.id.equals(Number(id)));
+    await db.delete(calendar).where(calendar.id === Number(id));
     res.json({ message: "Calendar entry deleted" });
   } catch (error) {
     res.status(500).json({ message: "Error deleting calendar entry", error });

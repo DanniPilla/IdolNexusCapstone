@@ -16,13 +16,14 @@
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
-    "drizzle-orm": "^0.36.4",
-    "express": "^4.21.1",
+    "dotenv": "^16.4.7",
+    "drizzle-orm": "^0.38.3",
+    "express": "^4.21.2",
     "firebase-admin": "^13.0.1",
     "neon": "^2.0.0",
     "neon-serverless": "^0.5.3",
     "pg": "^8.13.1",
+    "pg-pool": "^3.7.0",
     "ws": "^8.18.0"
   },
   "devDependencies": {

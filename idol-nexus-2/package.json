@@ -4,7 +4,7 @@
   "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
   "main": "eslint.config.js",
   "scripts": {
-    "dev": "concurrently \"npm run dev --prefix Frontend\" \"nodemon Backend/server.js\"",
+     "dev": "concurrently \"npm run dev --prefix Frontend\" \"cd Backend && nodemon server.js\"",
     "build": "npm run build --prefix Frontend",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -20,12 +20,12 @@ export const createTicket = async (req, res) => {
     }
 
     await db.insert(tickets).values({
-      event_id: eventId,
-      user_id: userId,
-      ticket_type: ticketType,
+      eventId,
+      userId,
+      ticketType: ticketType || "general",
       price,
       quantity,
-      max_per_user: maxPerUser,
+      maxPerUser: maxPerUser || 10,
     });
 
     res.status(201).json({ message: "Ticket created successfully." });
@@ -41,7 +41,7 @@ export const getTicketsByUser = async (req, res) => {
     const userTickets = await db
       .select()
       .from(tickets)
-      .where(tickets.user_id.equals(Number(userId)));
+      .where(tickets.userId === Number(userId));
     res.json(userTickets);
   } catch (error) {
     console.error("Error fetching user tickets:", error);
@@ -55,7 +55,7 @@ export const getTicketById = async (req, res) => {
     const ticket = await db
       .select()
       .from(tickets)
-      .where(tickets.id.equals(Number(id)))
+      .where(tickets.id === Number(id))
       .limit(1);
     if (ticket.length === 0) {
       return res.status(404).json({ message: "Ticket not found." });
@@ -79,7 +79,7 @@ export const updateTicket = async (req, res) => {
         quantity,
         status,
       })
-      .where(tickets.id.equals(Number(id)));
+      .where(tickets.id === Number(id));
 
     if (updatedTicket.rowCount === 0) {
       return res.status(404).json({ message: "Ticket not found." });
@@ -98,7 +98,7 @@ export const deleteTicket = async (req, res) => {
     const deletedTicket = await db
       .delete()
       .from(tickets)
-      .where(tickets.id.equals(Number(id)));
+      .where(tickets.id === Number(id));
 
     if (deletedTicket.rowCount === 0) {
       return res.status(404).json({ message: "Ticket not found." });
@@ -119,8 +119,8 @@ export const getTicketRevenue = async (req, res) => {
         totalRevenue: db.fn.sum(tickets.price.multiply(tickets.quantity)),
       })
       .from(tickets)
-      .where(tickets.event_id.equals(Number(eventId)))
-      .and(tickets.status.equals("active"));
+      .where(tickets.eventId === Number(eventId))
+      .and(tickets.status === "active");
 
     res.json({ revenue: revenue[0]?.totalRevenue || 0 });
   } catch (error) {

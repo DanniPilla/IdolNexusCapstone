@@ -17,7 +17,7 @@ export const getPaymentById = async (req, res) => {
     const payment = await db
       .select()
       .from(payments)
-      .where(payments.id.equals(Number(id)));
+      .where(payments.id === Number(id));
     if (!payment.length) {
       return res.status(404).json({ message: "Payment not found" });
     }
@@ -29,16 +29,12 @@ export const getPaymentById = async (req, res) => {
 };
 
 export const createPayment = async (req, res) => {
-  const { orderId, userId, stripePaymentId, amount, currency, paymentStatus } =
-    req.body;
+  const { orderId, stripePaymentId, amount } = req.body;
   try {
     const newPayment = await db.insert(payments).values({
       orderId,
-      userId,
       stripePaymentId,
       amount,
-      currency: currency || "AUD",
-      paymentStatus: paymentStatus || "pending",
     });
     res
       .status(201)
@@ -51,12 +47,13 @@ export const createPayment = async (req, res) => {
 
 export const updatePayment = async (req, res) => {
   const { id } = req.params;
-  const { paymentStatus } = req.body;
+  const { stripePaymentId, amount } = req.body;
   try {
     const updatedPayment = await db
       .update(payments)
-      .set({ paymentStatus })
-      .where(payments.id.equals(Number(id)));
+      .set({ stripePaymentId, amount })
+      .where(payments.id === Number(id))
+      .returning();
     res.json({ message: "Payment updated successfully", updatedPayment });
   } catch (error) {
     console.error("Error updating payment:", error);
@@ -67,7 +64,7 @@ export const updatePayment = async (req, res) => {
 export const deletePayment = async (req, res) => {
   const { id } = req.params;
   try {
-    await db.delete(payments).where(payments.id.equals(Number(id)));
+    await db.delete(payments).where(payments.id === Number(id));
     res.json({ message: "Payment deleted successfully" });
   } catch (error) {
     console.error("Error deleting payment:", error);

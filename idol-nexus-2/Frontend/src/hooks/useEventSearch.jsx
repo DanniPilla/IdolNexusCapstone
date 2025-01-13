@@ -1,37 +1,39 @@
+
 import { useState, useEffect } from "react";
 
 const useEventSearch = () => {
   const [eventsData, setEventsData] = useState([]); // All events
   const [filteredEvents, setFilteredEvents] = useState([]); // Filtered events
-  const [searchTerm, setSearchTerm] = useState(""); // User input
+  const [filters, setFilters] = useState({
+    searchTerm: "",
+    location: "",
+    dateFilter: "",
+  }); // Filters state
   const [loading, setLoading] = useState(false); // Loading state
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm); // Debounced search term
-
-  // Debounce search term to limit frequent re-renders
-  useEffect(() => {
-    const timerId = setTimeout(() => setDebouncedSearchTerm(searchTerm), 500);
-    return () => clearTimeout(timerId);
-  }, [searchTerm]);
+  const [errorMessage, setErrorMessage] = useState(null); // Error message
 
   // Fetch all events
   useEffect(() => {
     const fetchEvents = async () => {
       setLoading(true);
       try {
-        const response = await fetch("http://localhost:5000/events");
+        const response = await fetch("http://localhost:5000/api/events");
         if (!response.ok) {
-          console.log("Response Status:", response.status); // Log status code
-          console.log("Response:", await response.text()); // Log raw response text
           throw new Error(`Error: ${response.statusText}`);
         }
 
         const eventDataList = await response.json();
-        setEventsData(eventDataList);
-        setFilteredEvents(eventDataList); // Initialize with all events
-        setLoading(false);
-        console.log("Full Response Data:", eventDataList);
+        const normalizedEvents = eventDataList.map((event) => ({
+          ...event,
+          startDate: event.startDate ? new Date(event.startDate).toISOString() : null,
+        }));
+        setEventsData(normalizedEvents);
+        setFilteredEvents(normalizedEvents); // Initialize with all events
+        setErrorMessage(null); // Clear previous errors
       } catch (error) {
         console.error("Error fetching events:", error);
+        setErrorMessage("Failed to load events. Please try again later.");
+      } finally {
         setLoading(false);
       }
     };
@@ -39,37 +41,73 @@ const useEventSearch = () => {
     fetchEvents();
   }, []);
 
-  // Filter events based on debounced search term
+  // Filter events based on filters
   useEffect(() => {
-    const filterEvents = () => {
-      if (!debouncedSearchTerm) {
-        setFilteredEvents(eventsData); // Reset to all events
-        return;
-      }
+    if (loading) return;
 
-      const filtered = eventsData.filter((event) => {
+    const { searchTerm, location, dateFilter } = filters;
+    let filtered = eventsData;
+
+    if (searchTerm) {
+      filtered = filtered.filter((event) =>
+        event.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    if (location) {
+      filtered = filtered.filter((event) =>
+        event.venueCity?.toLowerCase().includes(location.toLowerCase())
+      );
+    }
+
+    if (dateFilter === "today") {
+      const today = new Date();
+      filtered = filtered.filter((event) => {
+        const eventDate = new Date(event.startDate);
         return (
-          event.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
-          event.location?.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
-          event.category?.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
-          (event.tags || []).some((tag) =>
-            tag.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
-          )
+          eventDate.getDate() === today.getDate() &&
+          eventDate.getMonth() === today.getMonth() &&
+          eventDate.getFullYear() === today.getFullYear()
         );
       });
+    }
 
-      setFilteredEvents(filtered);
-    };
+    if (dateFilter === "this_week") {
+      const today = new Date();
+      const startOfWeek = new Date(today.setDate(today.getDate() - today.getDay()));
+      const endOfWeek = new Date(startOfWeek);
+      endOfWeek.setDate(endOfWeek.getDate() + 6);
 
-    filterEvents();
-  }, [debouncedSearchTerm, eventsData]);
+      filtered = filtered.filter((event) => {
+        const eventDate = new Date(event.startDate);
+        return eventDate >= startOfWeek && eventDate <= endOfWeek;
+      });
+    }
+
+    if (dateFilter === "this_month") {
+      const today = new Date();
+      const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+      const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+      filtered = filtered.filter((event) => {
+        const eventDate = new Date(event.startDate);
+        return eventDate >= startOfMonth && eventDate <= endOfMonth;
+      });
+    }
+
+    setFilteredEvents(filtered);
+  }, [filters, eventsData, loading]);
+
+  const updateFilters = (newFilters) => {
+    setFilters((prev) => ({ ...prev, ...newFilters }));
+  };
 
   return {
-    eventsData, // Full event data
-    filteredEvents, // Filtered event data based on search
-    setSearchTerm, // Function to update the search term
-    searchTerm, // Current search term
-    loading, // Loading state
+    eventsData,
+    filteredEvents,
+    loading,
+    errorMessage,
+    updateFilters, // Function to update filters dynamically
   };
 };
 

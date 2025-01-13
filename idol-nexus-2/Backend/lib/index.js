@@ -1,16 +1,20 @@
 import { config } from "dotenv";
-import { drizzle } from "drizzle-orm/neon-serverless";
+import { drizzle } from "drizzle-orm/neon-http";
 import { neon } from "@neondatabase/serverless";
-config({ path: "./Backend/.env" });
+
+config({ path: "../.env" });
+
 // Replace with your Neon connection string
 const databaseUrl = process.env.DATABASE_URL;
 
-console.log(
-  "Loaded environment variable DATABASE_URL:",
-  process.env.DATABASE_URL
-);
-const client = neon(databaseUrl, {
-  ssl: true,
-});
-console.log("Database URL:", databaseUrl);
-export const db = drizzle(client);
+let db;
+
+try {
+  const client = neon(databaseUrl);
+  db = drizzle(client);
+  console.log("Database Connection Established successfully");
+} catch (error) {
+  console.error("Error connecting to database", error);
+}
+
+export { db };

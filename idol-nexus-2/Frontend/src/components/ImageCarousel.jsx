@@ -27,13 +27,13 @@ export default function ImageCarousel({ images }) {
 
       {/* Navigation Buttons */}
       <button
-        className="absolute top-1/2 left-0 transform -translate-y-1/2 bg-gray-800 text-white p-2"
+        className="absolute top-1/2 left-0 transform -translate-y-1/2 bg-fuchsia-400 text-white p-2"
         onClick={goToPrevious}
       >
         &#8249; {/* Left Arrow */}
       </button>
       <button
-        className="absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-800 text-white p-2"
+        className="absolute top-1/2 right-0 transform -translate-y-1/2 bg-fuchsia-400 text-white p-2"
         onClick={goToNext}
       >
         &#8250; {/* Right Arrow */}
@@ -45,7 +45,7 @@ export default function ImageCarousel({ images }) {
           <button
             key={index}
             className={`w-3 h-3 mx-1 rounded-full ${
-              currentIndex === index ? "bg-gray-800" : "bg-gray-400"
+              currentIndex === index ? "bg-fuchsia-300" : "bg-fuchsia-400"
             }`}
             onClick={() => setCurrentIndex(index)}
           ></button>

@@ -1,14 +1,31 @@
-import { pgTable, serial, integer, timestamp } from "drizzle-orm/pg-core";
-import { events } from "./eventSchema.js"; // Import the events table
-import { users } from "./userSchema.js"; // Import the users table
+import {
+  pgTable,
+  serial,
+  integer,
+  timestamp,
+  index,
+} from "drizzle-orm/pg-core";
+
+import { users } from "./userSchema.js";
+import { events } from "./eventSchema.js";
 
 export const calendar = pgTable("calendar", {
   id: serial("id").primaryKey(),
-  eventId: integer("event_id")
-    .notNull()
-    .references(() => events.id),
+
+  // Foreign keys
   userId: integer("user_id")
     .notNull()
-    .references(() => users.id),
-  added_at: timestamp("added_at").defaultNow().notNull(),
+    .references(() => users.id, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    }),
+  eventId: integer("event_id")
+    .notNull()
+    .references(() => events.id, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    }),
+
+  // Timestamps
+  createdAt: timestamp("created_at").defaultNow().notNull(),
 });

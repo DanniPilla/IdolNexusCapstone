@@ -4,22 +4,23 @@ import {
   integer,
   numeric,
   timestamp,
-  varchar,
 } from "drizzle-orm/pg-core";
 
 import { tickets } from "./ticketSchema.js";
-import { users } from "./userSchema.js";
 
 export const orders = pgTable("orders", {
   id: serial("id").primaryKey(),
-  userId: integer("user_id")
-    .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
+
+  // Foreign keys
   ticketId: integer("ticket_id")
     .notNull()
     .references(() => tickets.id, { onDelete: "cascade" }),
-  quantity: integer("quantity").notNull().default(1),
+
+  // Order attributes
+  quantity: integer("quantity").default(1).notNull(),
   totalAmount: numeric("total_amount", { precision: 10, scale: 2 }).notNull(),
-  orderStatus: varchar("order_status", { length: 20 }).default("pending"),
+
+  // Timestamps
   orderedAt: timestamp("ordered_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
 });
