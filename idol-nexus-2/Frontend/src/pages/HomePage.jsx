@@ -5,9 +5,10 @@ import useEventSearch from "../hooks/useEventSearch";
 
 export default function HomePage() {
   const images = [
+    "https://www.j-popproject.com/wp-content/uploads/2021/11/image7-1.jpg",
     "https://images.squarespace-cdn.com/content/v1/65dd87a5ba1d730583d0b3db/581f140c-aae7-4518-9f04-fc0b99de363c/DSC04286+%281%29.jpg",
     "https://www.tokyoweekender.com/wp-content/uploads/2021/06/Ladybeard-Babybeard-Japan-Tokyo-Weekender.jpg",
-    "https://scontent.fbne6-1.fna.fbcdn.net/v/t39.30808-6/334943177_598247811824239_1474274488831979670_n.jpg",
+    ,
   ];
 
   const { filteredEvents, loading, updateFilters } = useEventSearch();

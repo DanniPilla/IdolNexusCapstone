@@ -58,7 +58,7 @@ export default function NavBar() {
         {user ? (
           <li className="relative group">
             <span className="hidden sm:inline px-4 uppercase font-bold text-white hover:text-purple-700">
-              Welcome, {user.displayName || "User"}
+              Welcome, {user.displayName || user.firstName || "User"}
             </span>
           </li>
         ) : (

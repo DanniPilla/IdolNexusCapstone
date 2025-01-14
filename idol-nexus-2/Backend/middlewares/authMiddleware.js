@@ -1,17 +1,17 @@
-import { firebaseAuth } from "../utils/firebaseAdmin.js";
+import jwt from "jsonwebtoken";
 
-export const verifyToken = async (req, res, next) => {
+export const verifyToken = (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
+
   if (!token) {
     return res.status(401).json({ message: "Unauthorized: No token provided" });
   }
 
   try {
-    const decodedToken = await firebaseAuth.verifyIdToken(token);
-    req.user = decodedToken;
-    next();
+    const decoded = jwt.verify(token, process.env.JWT_SECRET); // Verify token
+    req.user = decoded; // Add user info to the request object
+    next(); // Pass control to the next middleware
   } catch (error) {
-    console.error("Error verifying token:", error);
-    res.status(403).json({ message: "Unauthorized: Invalid token" });
+    return res.status(401).json({ message: "Invalid or expired token" });
   }
 };

@@ -2,6 +2,7 @@ import { Helmet } from "react-helmet-async";
 import EventSearchBox from "../components/EventSearchBox";
 import EventsGrid from "../components/EventsGrid";
 import useEventSearch from "../hooks/useEventSearch";
+import UserDisplayCard from "../components/UserDisplayCard";
 
 export default function FindEventPage() {
   const { filteredEvents, loading, updateFilters } = useEventSearch();
@@ -54,6 +55,7 @@ export default function FindEventPage() {
           <EventsGrid events={filteredEvents} loading={loading} />
         </section>
       </div>
+      <UserDisplayCard/>
     </div>
   );
 }
