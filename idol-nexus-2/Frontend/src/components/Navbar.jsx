@@ -1,9 +1,15 @@
 import { NavLink } from 'react-router-dom'
 import { Heart, House, Ticket, Search, LogIn, Plus, ClipboardPen, ShoppingCart } from "lucide-react"
 import { useUser } from "../context/UserContext";
+import { useState } from "react";
+import Cart from "../components/Cart";
 
 export default function NavBar() {
+  const [showModal, setShowModal] = useState(false);
    const { user } = useUser();
+    const toggleModal = () => {
+    setShowModal((prev) => !prev);
+  };
   return (
     <nav 
       className="NavBar sticky top-0 w-full flex justify-between items-center shadow-md z-50">
@@ -60,11 +66,14 @@ export default function NavBar() {
         </li>
 
         <li className="relative group flex items-center">
-          <NavLink to="/cart" className="px-4 uppercase font-bold text-white hover:text-purple-700">
+          <button 
+          onClick={toggleModal}
+          className="px-4 uppercase font-bold text-white hover:text-purple-700">
            
             <ShoppingCart  className="text-lg sm:hidden" />
             <ShoppingCart  className="hidden sm:inline text-lg" />
-          </NavLink>
+        
+          </button>
           <span className="absolute bottom-[-30px] left-1/2 transform -translate-x-1/2 bg-purple-700 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 sm:opacity-0 sm:group-hover:hidden transition-opacity duration-200">
             Cart
           </span>
@@ -102,6 +111,7 @@ export default function NavBar() {
         </>
         )}
       </ul>
+      <Cart showModal={showModal} toggle={toggleModal} />
     </nav>
   )
 }
