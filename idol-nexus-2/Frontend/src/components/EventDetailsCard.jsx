@@ -1,6 +1,27 @@
+import { useContext, useState } from "react";
+import { CartContext } from "../context/CartContext"
+import { useNavigate} from "react-router-dom";
+
 const EventDetailsCard = ({ event }) => {
+  const { addToCart } = useContext(CartContext);
+  const [selectedDate, setSelectedDate] = useState(event.startDate);
+  const [selectedTicketType, setSelectedTicketType] = useState("General Admission");
+ const navigate = useNavigate();
+  const handleAddToCart = () => {
+    const ticket = {
+      id: event.id,
+      eventName: event.name,
+      ticketType: selectedTicketType,
+      price: event.ticketPrice || 0,
+      date: selectedDate,
+      thumbnail: event.thumbnailImage || "default-thumbnail.jpg",
+    };
+ navigate("/cart");
+  console.log("Adding to cart:", ticket); 
+    addToCart(ticket);
+  };
+
   const startDate = event.startDate ? new Date(event.startDate) : null;
-  const endDate = event.endDate ? new Date(event.endDate) : null;
 
   return (
     <div className="bg-gradient-to-b from-purple-50 to-purple-100 p-6 rounded-lg shadow-lg max-w-4xl mx-auto">
@@ -44,6 +65,8 @@ const EventDetailsCard = ({ event }) => {
             <div className="flex justify-between items-center">
               <label className="text-sm text-gray-700 font-medium">Date</label>
               <select
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
                 className="bg-white border border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 p-2 text-sm"
               >
                 {startDate && <option>{startDate.toLocaleDateString()}</option>}
@@ -52,6 +75,8 @@ const EventDetailsCard = ({ event }) => {
             <div className="flex justify-between items-center">
               <label className="text-sm text-gray-700 font-medium">Ticket Type</label>
               <select
+                value={selectedTicketType}
+                onChange={(e) => setSelectedTicketType(e.target.value)}
                 className="bg-white border border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 p-2 text-sm"
               >
                 <option>General Admission</option>
@@ -61,7 +86,10 @@ const EventDetailsCard = ({ event }) => {
           </div>
 
           {/* Action Buttons */}
-          <button className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold py-3 rounded-lg mt-6 hover:from-purple-600 hover:to-pink-600">
+          <button
+            onClick={handleAddToCart}
+            className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold py-3 rounded-lg mt-6 hover:from-purple-600 hover:to-pink-600"
+          >
             Add to Cart
           </button>
         </div>

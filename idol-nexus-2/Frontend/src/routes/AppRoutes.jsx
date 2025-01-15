@@ -8,6 +8,7 @@ import TicketsPage from "../pages/TicketsPage";
 import LogInPage from "../pages/LogInPage";
 import SignUpPage from "../pages/SignUpPage";
 import SinglePageEvent from "../pages/SinglePageEvent";
+import CartPage from "../pages/CartPage";
 
 
 function AppRoutes(props) {
@@ -31,6 +32,7 @@ return (
 <Route path='/login' element={<LogInPage {...props} />} />
 
 <Route path='/signup' element={<SignUpPage {...props} />} />
+<Route path='/cart' element={<CartPage {...props} />} />
 
 {/* special route to handle if none of the above match */}
 <Route path="*" element={<PageNotFound />} />

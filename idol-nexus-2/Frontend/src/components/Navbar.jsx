@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { Heart, House, Ticket, Search, LogIn, Plus, ClipboardPen } from "lucide-react"
+import { Heart, House, Ticket, Search, LogIn, Plus, ClipboardPen, ShoppingCart } from "lucide-react"
 import { useUser } from "../context/UserContext";
 
 export default function NavBar() {
@@ -37,7 +37,10 @@ export default function NavBar() {
             Find Events
           </span>
         </li>
-        <li className="relative group">
+       
+        {user && (
+          <>
+           <li className="relative group">
           <NavLink to="/createevents" className="px-4 uppercase font-bold text-white hover:text-purple-700">
             <Plus className="text-lg sm:hidden" />
             <span className="hidden sm:inline">Create Events</span>
@@ -55,11 +58,26 @@ export default function NavBar() {
             Tickets
           </span>
         </li>
+
+        <li className="relative group flex items-center">
+          <NavLink to="/cart" className="px-4 uppercase font-bold text-white hover:text-purple-700">
+           
+            <ShoppingCart  className="text-lg sm:hidden" />
+            <ShoppingCart  className="hidden sm:inline text-lg" />
+          </NavLink>
+          <span className="absolute bottom-[-30px] left-1/2 transform -translate-x-1/2 bg-purple-700 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 sm:opacity-0 sm:group-hover:hidden transition-opacity duration-200">
+            Cart
+          </span>
+        </li>
+          </>
+        )}
         {user ? (
           <li className="relative group">
-            <span className="hidden sm:inline px-4 uppercase font-bold text-white hover:text-purple-700">
+            <NavLink to="/profile" className="hidden sm:inline px-4 uppercase font-bold text-white hover:text-purple-700">
+            <span >
               Welcome, {user.displayName || user.firstName || "User"}
             </span>
+            </NavLink>
           </li>
         ) : (
           <>
