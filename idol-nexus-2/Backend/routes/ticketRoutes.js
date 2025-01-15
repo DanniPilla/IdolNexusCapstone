@@ -1,4 +1,5 @@
 import express from "express";
+import { verifyToken } from "../middlewares/authMiddleware.js";
 import {
   getAllTickets,
   getTicketById,
@@ -7,7 +8,6 @@ import {
   deleteTicket,
   getTicketsByUser,
 } from "../controllers/ticketController.js";
-import { verifyToken } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 

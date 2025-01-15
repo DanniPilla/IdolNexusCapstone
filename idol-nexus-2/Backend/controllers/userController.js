@@ -73,6 +73,7 @@ export const registerUser = async (req, res) => {
     displayName,
     role,
     organisationName,
+    bio,
   } = req.body;
 
   if (!email || !password) {
@@ -98,7 +99,12 @@ export const registerUser = async (req, res) => {
         firstName: firstName || null,
         lastName: lastName || null,
         isActive: true,
-        phoneNumber: phon,
+        phoneNumber: phoneNumber,
+        profilePicture: profilePicture || null,
+        displayName: displayName,
+        role: role || undefined,
+        organisationName: organisationName || null,
+        bio: bio || null,
       })
       .returning({ id: users.id, email: users.email });
 

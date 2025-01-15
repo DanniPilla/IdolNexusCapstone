@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "description": "",
+  "proxy": "http://localhost:5000",
   "dependencies": {
     "@vitejs/plugin-react": "^4.3.4",
     "firebase": "^11.1.0",

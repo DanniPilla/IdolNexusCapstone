@@ -1,31 +1,37 @@
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom"; // Import useNavigate
+import { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { useUser } from "../context/UserContext";
+import useFetch from "../hooks/useFetch";
 
 const LogIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
+  const [requestOptions, setRequestOptions] = useState(null);
   const { setUser } = useUser();
   const navigate = useNavigate();
 
-  const handleEmailSignIn = async (e) => {
+  const { data, loading, error } = useFetch(
+    requestOptions?.endpoint,
+    requestOptions?.options,
+    [requestOptions]
+  );
+
+  const handleEmailSignIn = (e) => {
     e.preventDefault();
-    try {
-      const response = await fetch("http://localhost:5000/api/users/login", {
+
+    setRequestOptions({
+      endpoint: "http://localhost:5000/api/users/login",
+      options: {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
-      });
+      },
+    });
+  };
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Login failed");
-      }
-
+  // Handle login response
+  useEffect(() => {
+    if (data) {
       console.log("Login successful:", data);
 
       // Save the JWT token to localStorage
@@ -36,11 +42,8 @@ const LogIn = () => {
 
       // Redirect to the home page
       navigate("/");
-    } catch (err) {
-      console.error("Error logging in:", err);
-      setError(err.message);
     }
-  };
+  }, [data, navigate, setUser]);
 
   return (
     <div className="flex flex-col justify-center w-full lg:w-1/2 px-8 py-12 lg:px-16 rounded-l-lg">
@@ -48,12 +51,14 @@ const LogIn = () => {
         <img
           className="mx-auto h-20 w-auto rotate-45"
           src="light-stick (2).png"
-          alt="Idol nexus"
+          alt="Idol Nexus"
         />
         <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-pink-500">
           Welcome back!
         </h2>
-        <p className="mt-2 text-center text-sm text-gray-600">Sign in to your account</p>
+        <p className="mt-2 text-center text-sm text-gray-600">
+          Sign in to your account
+        </p>
         {error && <p className="text-center text-red-500 mt-2">{error}</p>}
       </div>
 
@@ -98,12 +103,12 @@ const LogIn = () => {
             <button
               type="submit"
               className="w-full rounded-lg bg-indigo-600 px-4 py-2 text-white font-semibold hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-600"
+              disabled={loading} // Disable button while loading
             >
-              Sign in
+              {loading ? "Signing in..." : "Sign in"}
             </button>
           </div>
         </form>
-        {error && <p>{error}</p>}
 
         <p className="mt-6 text-center text-sm text-gray-500">
           Don’t have an account?{" "}

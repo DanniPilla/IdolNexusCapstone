@@ -42,7 +42,7 @@ export const getTicketsByUser = async (req, res) => {
     const userTickets = await db
       .select()
       .from(tickets)
-      .where(tickets.userId.eq(userId)); // Fetch tickets for this user
+      .where(eq(tickets.userId, userId));
     res.json(userTickets);
   } catch (error) {
     console.error("Error fetching user tickets:", error);
@@ -56,7 +56,7 @@ export const getTicketById = async (req, res) => {
     const ticket = await db
       .select()
       .from(tickets)
-      .where(tickets.id === Number(id))
+      .where(eq(tickets.id, id))
       .limit(1);
     if (ticket.length === 0) {
       return res.status(404).json({ message: "Ticket not found." });

@@ -1,5 +1,6 @@
 import { db } from "../lib/index.js";
 import { events } from "../db/eventSchema.js";
+import { eq } from "drizzle-orm";
 
 export const getAllEvents = async (req, res) => {
   try {
@@ -21,12 +22,14 @@ export const getAllEvents = async (req, res) => {
 };
 
 export const getEventById = async (req, res) => {
-  const id = req.params;
+  const { id } = req.params;
+  console.log("Fetching event with ID:", id);
   try {
     const event = await db
       .select()
       .from(events)
-      .where(events.id === Number(id));
+      .where(eq(events.id, Number(id)));
+
     if (event.length === 0) {
       return res.status(404).json({ message: "Event not found" });
     }
@@ -67,7 +70,7 @@ export const updateEvent = async (req, res) => {
         endDate,
         venueId,
       })
-      .where(events.id === Number(id));
+      .where(eq(events.id, id));
     res.json({ message: "Event updated successfully", updated });
   } catch (error) {
     res.status(500).json({ message: "Error updating event", error });
