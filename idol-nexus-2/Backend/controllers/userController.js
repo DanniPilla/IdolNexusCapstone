@@ -149,10 +149,30 @@ export const loginUser = async (req, res) => {
   }
 };
 
-// Get all users
+// Get all users (admin only)
 export const getAllUsers = async (req, res) => {
   try {
     const allUsers = await db.select().from(users);
+    res.json(allUsers);
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+// Get public user info
+export const getAllPublicUserInfo = async (req, res) => {
+  const { page = 1, limit = 10 } = req.query; // Default to page 1, 10 users per page
+  const offset = (page - 1) * limit;
+  try {
+    // Select only public fields
+    const publicFields = ["id", "name", "profilePicture", "bio"];
+    const allUsers = await db
+      .select(...publicFields)
+      .from(users)
+      .limit(limit)
+      .offset(offset);
+
     res.json(allUsers);
   } catch (error) {
     console.error("Error fetching users:", error);

@@ -1,12 +1,17 @@
 import { useContext, useState } from "react";
 import { CartContext } from "../context/CartContext"
 import { useNavigate} from "react-router-dom";
+import Cart from "../components/Cart";
 
 const EventDetailsCard = ({ event }) => {
   const { addToCart } = useContext(CartContext);
   const [selectedDate, setSelectedDate] = useState(event.startDate);
   const [selectedTicketType, setSelectedTicketType] = useState("General Admission");
- const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
+    const toggleModal = () => {
+    setShowModal((prev) => !prev);
+  };
+  
   const handleAddToCart = () => {
     const ticket = {
       id: event.id,
@@ -16,7 +21,7 @@ const EventDetailsCard = ({ event }) => {
       date: selectedDate,
       thumbnail: event.thumbnailImage || "default-thumbnail.jpg",
     };
- navigate("/cart");
+
   console.log("Adding to cart:", ticket); 
     addToCart(ticket);
   };
@@ -87,7 +92,10 @@ const EventDetailsCard = ({ event }) => {
 
           {/* Action Buttons */}
           <button
-            onClick={handleAddToCart}
+            onClick={() => {
+              handleAddToCart();
+            toggleModal();
+            }}
             className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold py-3 rounded-lg mt-6 hover:from-purple-600 hover:to-pink-600"
           >
             Add to Cart
@@ -110,6 +118,7 @@ const EventDetailsCard = ({ event }) => {
           </p>
         </details>
       </div>
+      <Cart showModal={showModal} toggle={toggleModal} />
     </div>
   );
 };

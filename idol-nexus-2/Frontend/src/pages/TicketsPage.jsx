@@ -1,10 +1,11 @@
 import useTicketView from "../hooks/useTicketView";
 import TicketCard from "../components/TicketCard";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function TicketsPage() {
   const { tickets, loading, error } = useTicketView();
 
-  if (loading) return <p>Loading tickets...</p>;
+  if (loading) return <LoadingSpinner/>;
   if (error) return <p>Error: {error}</p>;
 
   return (

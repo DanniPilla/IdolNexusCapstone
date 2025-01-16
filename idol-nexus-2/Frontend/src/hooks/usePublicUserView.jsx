@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const useUserView = () => {
+const usePublicUserView = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -8,7 +8,8 @@ const useUserView = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/users", {
+       
+        const response = await fetch("http://localhost:5000/api/users/public", {
          
         });
 
@@ -32,4 +33,4 @@ const useUserView = () => {
   return {users, loading, error };
 };
 
-export default useUserView;
+export default usePublicUserView;

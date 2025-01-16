@@ -8,13 +8,14 @@ import {
   deleteUser,
   registerUser,
   loginUser,
+  getAllPublicUserInfo,
 } from "../controllers/userController.js";
 
 const router = express.Router();
 
 router.post("/register", registerUser);
 router.post("/login", loginUser);
-
+router.get("/public", getAllPublicUserInfo);
 router.get("/", verifyToken, getAllUsers);
 router.get("/:id", verifyToken, getUserById);
 router.put("/:id", verifyToken, updateUser);

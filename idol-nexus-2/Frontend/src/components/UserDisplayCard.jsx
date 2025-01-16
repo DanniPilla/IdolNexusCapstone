@@ -1,4 +1,6 @@
-export default function UserDisplayCard () {
+const UserDisplayCard = ({users}) => {
+
+
 
     return(
 <div class="flex flex-col items-center ">
@@ -7,7 +9,7 @@ export default function UserDisplayCard () {
     <div class="flex flex-col sm:flex-row items-center">
       <img
         src="https://via.placeholder.com/200"
-        alt="Character Avatar"
+        alt="Profile Picture"
         class="rounded-lg border-4 border-purple-500 shadow-md mb-4 sm:mb-0 sm:mr-6 w-40 h-40 object-cover"
       />
       <div class="flex-grow">
@@ -42,3 +44,5 @@ export default function UserDisplayCard () {
 
 </div>
     )}
+
+    export default UserDisplayCard 

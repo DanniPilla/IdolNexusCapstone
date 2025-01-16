@@ -4,7 +4,14 @@ const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+const handleLogout = () => {
 
+  localStorage.removeItem("token");
+  setUser(null); 
+  
+
+  navigate("/login");
+};
   return (
     <UserContext.Provider value={{ user, setUser }}>
       {children}
