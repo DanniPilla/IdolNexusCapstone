@@ -8,6 +8,8 @@ const useEventSearch = () => {
     searchTerm: "",
     location: "",
     dateFilter: "",
+    ticketPrice: "",
+    category: "",
   }); // Filters state
   const [loading, setLoading] = useState(false); // Loading state
   const [errorMessage, setErrorMessage] = useState(null); // Error message
@@ -45,7 +47,7 @@ const useEventSearch = () => {
   useEffect(() => {
     if (loading) return;
 
-    const { searchTerm, location, dateFilter } = filters;
+    const { searchTerm, location, dateFilter, ticketPrice, category } = filters;
     let filtered = eventsData;
 
     if (searchTerm) {
@@ -58,6 +60,24 @@ const useEventSearch = () => {
       filtered = filtered.filter((event) =>
         event.venueCity?.toLowerCase().includes(location.toLowerCase())
       );
+    }
+
+    if (ticketPrice === "free") {
+      filtered = filtered.filter((event) =>
+        event.ticketPrice <= 0
+      );
+    }
+
+    if (ticketPrice === "costs") {
+       filtered = filtered.filter((event) =>
+        event.ticketPrice > 0
+      );
+    }
+
+    if (category === "ofukai") {
+      filtered =filtered.filter((event) =>
+        event.category === "Ofukai"
+    );
     }
 
     if (dateFilter === "today") {
