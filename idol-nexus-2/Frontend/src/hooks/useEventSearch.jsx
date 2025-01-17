@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 const useEventSearch = () => {
   const [eventsData, setEventsData] = useState([]); // All events
   const [filteredEvents, setFilteredEvents] = useState([]); // Filtered events
+  
   const [filters, setFilters] = useState({
     searchTerm: "",
     location: "",

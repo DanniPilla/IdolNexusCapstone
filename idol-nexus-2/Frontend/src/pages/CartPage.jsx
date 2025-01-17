@@ -10,7 +10,7 @@ const [showModal, setShowModal] = useState(false);
 
   return (
     <div>
-      <button onClick={toggleModal} className="btn-open-cart">
+      <button onClick={toggleModal} >
         Open Cart
       </button>
       <Cart showModal={showModal} toggle={toggleModal} />

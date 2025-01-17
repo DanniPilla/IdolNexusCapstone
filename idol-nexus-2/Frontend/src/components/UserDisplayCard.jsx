@@ -1,13 +1,26 @@
-const UserDisplayCard = ({ users }) => {
-  
+import { PenIcon } from "lucide-react"
+
+const UserDisplayCard = ({ users = [] }) => {
+  if (!users.length) {
+    return <p>No user data available.</p>; 
+  }
+
   return (
     <div className="flex flex-col items-center">
       {/* User Info Card */}
       {users.map((user) => (
         <div
-          className="w-full max-w-4xl bg-white shadow-lg rounded-lg text-gray-800 p-4"
+          className="relative w-full max-w-4xl bg-white shadow-lg rounded-lg text-gray-800 p-4"
           key={user.id}
         >
+          {/* Edit Icon */}
+          <button
+            className="absolute top-2 right-2 bg-purple-500 text-white rounded-full p-2 hover:bg-purple-600 transition-colors"
+            // onClick=
+          >
+            <PenIcon className="w-4 h-4" />
+          </button>
+
           <div className="flex flex-col sm:flex-row items-center">
             <img
               src={user.profilePicture || "https://via.placeholder.com/200"}

@@ -63,7 +63,7 @@ const EventSearchBox = ({ onFilterChange }) => {
       <select
         value={dateFilter}
         onChange={handleDateChange}
-        className="placeholder-white bg-transparent border-b-2 border-white rounded-xl px-4 py-2 placeholder-white text-white focus:outline-none"
+        className=" bg-transparent border-b-2 border-white rounded-xl px-4 py-2  text-white focus:outline-none"
       >
         <option value="">Any Date</option>
         <option value="today">Today</option>
@@ -74,7 +74,7 @@ const EventSearchBox = ({ onFilterChange }) => {
       <select
         value={ticketPrice}
         onChange={handlePriceChange}
-        className="placeholder-white bg-transparent border-b-2 border-white rounded-xl px-4 py-2 placeholder-white text-white focus:outline-none"
+        className=" bg-transparent border-b-2 border-white rounded-xl px-4 py-2  text-white focus:outline-none"
       placeholder="Price"
       >
          <option value="" disabled hidden className="text-gray-400">
@@ -88,7 +88,7 @@ const EventSearchBox = ({ onFilterChange }) => {
         value={category}
         onChange={handleCategoryChange}
         placeholder="Category"     
-        className="placeholder-white bg-transparent border-b-2 border-white rounded-xl px-4 py-2 placeholder-white text-white focus:outline-none"
+        className=" bg-transparent border-b-2 border-white rounded-xl px-4 py-2  text-white focus:outline-none"
 
      >
         <option value="" disabled hidden className="text-gray-400">

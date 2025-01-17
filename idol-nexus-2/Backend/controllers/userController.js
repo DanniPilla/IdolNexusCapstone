@@ -187,8 +187,22 @@ export const getAllPublicUserInfo = async (req, res) => {
   const { page = 1, limit = 10 } = req.query; // Default to page 1, 10 users per page
   const offset = (page - 1) * limit;
   try {
-    // Select only public fields
-    const publicFields = ["id", "name", "profile_[icture", "bio"];
+    const publicFields = [
+      users.id,
+      users.displayName,
+      users.profilePicture,
+      users.bio,
+      users.firstName,
+      users.organisationName,
+      users.websiteUrl,
+      users.socialLinks,
+      users.callAndResponse,
+      users.hobby,
+      users.favoriteFood,
+      users.favoriteColor,
+      users.height,
+      users.birthday,
+    ];
     const allUsers = await db
       .select(...publicFields)
       .from(users)
