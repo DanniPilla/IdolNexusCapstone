@@ -80,6 +80,7 @@ const EventSearchBox = ({ onFilterChange }) => {
          <option value="" disabled hidden className="text-gray-400">
     Price
   </option>
+   <option value="">Any</option>
   <option value="free">Free</option>
   <option value="0-20">$0-$20</option>
   <option value="20-50">$20-$50</option>
@@ -94,6 +95,7 @@ const EventSearchBox = ({ onFilterChange }) => {
         <option value="" disabled hidden className="text-gray-400">
     Category
   </option>
+  <option value="">All</option>
   <option value="ofukai">Ofukai</option>
   <option value="debut">Debut</option>
   <option value="graduation">Graduation</option>
