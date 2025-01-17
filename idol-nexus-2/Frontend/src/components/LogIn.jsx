@@ -37,6 +37,9 @@ const LogIn = () => {
       // Save the JWT token to localStorage
       localStorage.setItem("token", data.token);
 
+       localStorage.setItem("user", JSON.stringify(data.user));
+
+
       // Save user information in the context
       setUser(data.user);
 

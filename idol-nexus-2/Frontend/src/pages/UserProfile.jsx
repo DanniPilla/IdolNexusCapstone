@@ -1,10 +1,10 @@
-import useUserView from "../hooks/userPersonalUserView";
+import usePersonalUserView from "../hooks/usePersonalUserView";
 import UserDisplayCard from "../components/UserDisplayCard";
 import LogoutButton from "../components/LogoutButton";
 import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function UserProfile() {
-  const { users, loading, error } = useUserView();
+  const { users, loading, error } = usePersonalUserView();
 
   if (loading) return <LoadingSpinner/>;
   if (error) return <p>Error: {error}</p>;
@@ -12,9 +12,7 @@ export default function UserProfile() {
   return (
     <>
     <div className="w-full min-h-screen">
-      <h1 className="pl-6 text-8xl font-extrabold drop-shadow-lg text-pink-400 text-center mt-[5rem]">
-        users
-      </h1>
+     <h1 className="text-3xl font-bold text-pink-600 mt-10 mb-5">Your personal profile</h1>
       <UserDisplayCard users={users} />
       <LogoutButton />
     </div>

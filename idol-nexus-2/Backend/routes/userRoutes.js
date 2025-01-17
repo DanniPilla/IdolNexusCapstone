@@ -9,6 +9,7 @@ import {
   registerUser,
   loginUser,
   getAllPublicUserInfo,
+  getPersonalUser,
 } from "../controllers/userController.js";
 
 const router = express.Router();
@@ -16,7 +17,8 @@ const router = express.Router();
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.get("/public", getAllPublicUserInfo);
-router.get("/", verifyToken, getAllUsers);
+router.get("/", verifyToken, getPersonalUser);
+router.get("/admin", verifyToken, getAllUsers);
 router.get("/:id", verifyToken, getUserById);
 router.put("/:id", verifyToken, updateUser);
 router.delete("/:id", verifyToken, deleteUser);

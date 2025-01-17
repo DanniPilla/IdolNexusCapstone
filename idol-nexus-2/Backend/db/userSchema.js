@@ -32,6 +32,13 @@ export const users = pgTable("users", {
   socialLinks: json("social_links").default("{}"),
   preferences: json("preferences").default("{}"),
 
+  callAndResponse: text("call_and_response"),
+  hobby: text("hobby"),
+  favoriteFood: varchar("favorite_food", { length: 255 }),
+  favoriteColor: varchar("favorite_color", { length: 50 }),
+  height: varchar("height", { length: 20 }),
+  birthday: timestamp("birthday"),
+
   // Timestamps
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),

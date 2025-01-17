@@ -149,7 +149,29 @@ export const loginUser = async (req, res) => {
   }
 };
 
-// Get all users (admin only)
+export const getPersonalUser = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    console.log("User ID from token:", userId);
+
+    const personalUser = await db
+      .select()
+      .from(users)
+      .where(eq(users.id, userId));
+    console.log("Personal User:", personalUser);
+
+    if (!personalUser.length) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.json(personalUser);
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+// Get all users
 export const getAllUsers = async (req, res) => {
   try {
     const allUsers = await db.select().from(users);
@@ -166,7 +188,7 @@ export const getAllPublicUserInfo = async (req, res) => {
   const offset = (page - 1) * limit;
   try {
     // Select only public fields
-    const publicFields = ["id", "name", "profilePicture", "bio"];
+    const publicFields = ["id", "name", "profile_[icture", "bio"];
     const allUsers = await db
       .select(...publicFields)
       .from(users)

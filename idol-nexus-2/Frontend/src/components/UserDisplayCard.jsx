@@ -1,48 +1,84 @@
-const UserDisplayCard = ({users}) => {
-
-
-
-    return(
-<div class="flex flex-col items-center ">
-   {/* Character Info Card  */}
-  <div class="w-full max-w-4xl bg-white shadow-lg rounded-lg text-gray-800 p-4">
-    <div class="flex flex-col sm:flex-row items-center">
-      <img
-        src="https://via.placeholder.com/200"
-        alt="Profile Picture"
-        class="rounded-lg border-4 border-purple-500 shadow-md mb-4 sm:mb-0 sm:mr-6 w-40 h-40 object-cover"
-      />
-      <div class="flex-grow">
-        <h2 class="text-2xl font-bold mb-2">Idol Name</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <p><span class="font-semibold">Idol Group</span> I am solo!</p>
-          <p><span class="font-semibold">Birthday:</span> March 24th</p>
-          <p><span class="font-semibold">Height</span> 4'11"</p>
-          <p><span class="font-semibold">Call and Response:</span> Whose everyones sweet idol?</p>
-          <p><span class="font-semibold">Hobby:</span> Watching pro wrestling and martial arts movies</p>
-          <p><span class="font-semibold">Favorite Food:</span> Cream puffs</p>
-          <p><span class="font-semibold">Favorite Color:</span> Cream</p>
+const UserDisplayCard = ({ users }) => {
+  
+  return (
+    <div className="flex flex-col items-center">
+      {/* User Info Card */}
+      {users.map((user) => (
+        <div
+          className="w-full max-w-4xl bg-white shadow-lg rounded-lg text-gray-800 p-4"
+          key={user.id}
+        >
+          <div className="flex flex-col sm:flex-row items-center">
+            <img
+              src={user.profilePicture || "https://via.placeholder.com/200"}
+              alt="Profile Picture"
+              className="rounded-lg border-4 border-purple-500 shadow-md mb-4 sm:mb-0 sm:mr-6 w-40 h-40 object-cover"
+            />
+            <div className="flex-grow">
+              <h2 className="text-2xl font-bold mb-2">
+                {user.displayName || "Idol Name"}
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <p>
+                  <span className="font-semibold">Idol Group:</span>{" "}
+                  {user.organisationName || "Unknown"}
+                </p>
+                <p>
+                  <span className="font-semibold">Birthday:</span>{" "}
+                  {user.birthday || "Unknown"}
+                </p>
+                <p>
+                  <span className="font-semibold">Height:</span>{" "}
+                  {user.height || "Unknown"}
+                </p>
+                <p>
+                  <span className="font-semibold">Call and Response:</span>{" "}
+                  {user.callAndResponse || "Unknown"}
+                </p>
+                <p>
+                  <span className="font-semibold">Hobby:</span>{" "}
+                  {user.hobby || "Unknown"}
+                </p>
+                <p>
+                  <span className="font-semibold">Favorite Food:</span>{" "}
+                  {user.favoriteFood || "Unknown"}
+                </p>
+                <p>
+                  <span className="font-semibold">Favorite Color:</span>{" "}
+                  {user.favoriteColor || "Unknown"}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
+      ))}
+
+      {/* Badges Row */}
+      <div className="flex overflow-x-auto mt-6 mb-6 space-x-4">
+        <button className="flex-shrink-0 w-20 h-20 rounded-full bg-gray-200 hover:scale-110 transition-transform duration-300">
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/1435/1435715.png"
+            alt="Character 1"
+            className="rounded-full"
+          />
+        </button>
+        <button className="flex-shrink-0 w-20 h-20 rounded-full bg-gray-200 hover:scale-110 transition-transform duration-300">
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/1435/1435715.png"
+            alt="Character 2"
+            className="rounded-full"
+          />
+        </button>
+        <button className="flex-shrink-0 w-20 h-20 rounded-full bg-gray-200 hover:scale-110 transition-transform duration-300">
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/1435/1435715.png"
+            alt="Character 3"
+            className="rounded-full"
+          />
+        </button>
       </div>
     </div>
-  </div>
+  );
+};
 
-{/* Badges row */}
-  <div class="flex overflow-x-auto mt-6 mb-6 space-x-4">
-    <button class="flex-shrink-0 w-20 h-20 rounded-full bg-gray-200 hover:scale-110 transition-transform duration-300">
-      <img src="https://via.placeholder.com/80" alt="Character 1" class="rounded-full" />
-    </button>
-    <button class="flex-shrink-0 w-20 h-20 rounded-full bg-gray-200 hover:scale-110 transition-transform duration-300">
-      <img src="https://via.placeholder.com/80" alt="Character 2" class="rounded-full" />
-    </button>
-    <button class="flex-shrink-0 w-20 h-20 rounded-full bg-gray-200 hover:scale-110 transition-transform duration-300">
-      <img src="https://via.placeholder.com/80" alt="Character 3" class="rounded-full" />
-    </button>
-  
-  </div>
-
-
-</div>
-    )}
-
-    export default UserDisplayCard 
+export default UserDisplayCard;
