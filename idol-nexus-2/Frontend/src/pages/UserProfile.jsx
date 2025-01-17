@@ -16,9 +16,10 @@ export default function UserProfile() {
         users
       </h1>
       <UserDisplayCard users={users} />
+      <LogoutButton />
     </div>
 
-    <LogoutButton />
+  
     </>
   );
 }

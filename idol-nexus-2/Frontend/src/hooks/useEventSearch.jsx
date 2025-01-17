@@ -67,18 +67,19 @@ const useEventSearch = () => {
         event.ticketPrice <= 0
       );
     }
+if (ticketPrice === "0-20") {
+  filtered = filtered.filter((event) => event.ticketPrice >= 0 && event.ticketPrice <= 20);
+}
 
-    if (ticketPrice === "costs") {
-       filtered = filtered.filter((event) =>
-        event.ticketPrice > 0
-      );
-    }
+if (ticketPrice === "20-50") {
+  filtered = filtered.filter((event) => event.ticketPrice > 20 && event.ticketPrice <= 50);
+}
 
-    if (category === "ofukai") {
-      filtered =filtered.filter((event) =>
-        event.category === "Ofukai"
-    );
-    }
+   if (category) {
+  filtered = filtered.filter((event) =>
+    event.category?.toLowerCase() === category.toLowerCase()
+  );
+}
 
     if (dateFilter === "today") {
       const today = new Date();
