@@ -235,26 +235,45 @@ export const getUserById = async (req, res) => {
 // Update user
 export const updateUser = async (req, res) => {
   const { id } = req.params;
-  const { email, firstName, lastName, password } = req.body;
+  const { email, firstName, lastName, password, phoneNumber, bio } = req.body;
 
   try {
-    const [user] = await db.select().from(users).where("id", id);
+    // Check if user exists
+    const [user] = await db
+      .select()
+      .from(users)
+      .where(eq(users.id, Number(id)));
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
+    // Hash the new password only if provided
+    const hashedPassword = password
+      ? await bcrypt.hash(password, 10)
+      : undefined;
+
+    // Update user with provided fields
     const updates = {
       email: email || user.email,
-      first_name: firstName || user.first_name,
-      last_name: lastName || user.last_name,
-      password: password ? await bcrypt.hash(password, 10) : user.password,
+      firstName: firstName || user.firstName,
+      lastName: lastName || user.lastName,
+      phoneNumber: phoneNumber || user.phoneNumber,
+      bio: bio || user.bio,
+      password: hashedPassword || user.password, // Use hashedPassword if updated
     };
 
     const [updatedUser] = await db
       .update(users)
       .set(updates)
-      .where("id", id)
-      .returning(["id", "email", "first_name", "last_name"]);
+      .where(eq(users.id, Number(id)))
+      .returning([
+        users.id,
+        users.email,
+        users.firstName,
+        users.lastName,
+        users.phoneNumber,
+        users.bio,
+      ]);
 
     res
       .status(200)
@@ -270,12 +289,20 @@ export const deleteUser = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const [user] = await db.select().from(users).where("id", id);
+    // Check if user exists
+    const [user] = await db
+      .select()
+      .from(users)
+      .where(eq(users.id, Number(id)));
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
-    await db.update(users).set({ isActive: false }).where("id", id);
+    // Soft delete by setting isActive to false
+    await db
+      .update(users)
+      .set({ isActive: false })
+      .where(eq(users.id, Number(id)));
 
     res
       .status(200)

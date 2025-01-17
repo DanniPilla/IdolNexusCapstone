@@ -22,7 +22,7 @@ export const users = pgTable("users", {
   lastName: varchar("last_name", { length: 100 }),
   displayName: varchar("display_name", { length: 255 }),
   profilePicture: varchar("profile_picture", { length: 255 }),
-  role: varchar("role", { length: 20 }).default("attendee"), // Add .check() if needed
+  role: varchar("role", { length: 20 }).default("attendee"),
   isActive: boolean("is_active").default(true),
   lastLogin: timestamp("last_login"),
   phoneNumber: varchar("phone_number", { length: 20 }),
