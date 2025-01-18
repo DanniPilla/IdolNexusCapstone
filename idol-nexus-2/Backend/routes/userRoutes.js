@@ -8,17 +8,19 @@ import {
   deleteUser,
   registerUser,
   loginUser,
-  handleFirebaseSignIn,
+  getAllPublicUserInfo,
+  getPersonalUser,
 } from "../controllers/userController.js";
 
 const router = express.Router();
 
 router.post("/register", registerUser);
 router.post("/login", loginUser);
-router.get("/", verifyToken, getAllUsers);
-router.get("/:id", getUserById);
-router.put("/:id", updateUser);
-router.delete("/:id", deleteUser);
-router.post("/firebase-login", verifyToken, handleFirebaseSignIn);
+router.get("/public", getAllPublicUserInfo);
+router.get("/", verifyToken, getPersonalUser);
+router.get("/admin", verifyToken, getAllUsers);
+router.get("/:id", verifyToken, getUserById);
+router.put("/:id", verifyToken, updateUser);
+router.delete("/:id", verifyToken, deleteUser);
 
 export default router;

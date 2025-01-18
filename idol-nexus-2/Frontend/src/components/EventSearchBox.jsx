@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const EventSearchBox = ({ onFilterChange }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [city, setCity] = useState("");
   const [dateFilter, setDateFilter] = useState("");
+  const [ticketPrice, setTicketPrice] = useState("");
+  const [category, setCategory] = useState("");
 
   const handleSearchChange = (e) => {
     const value = e.target.value;
@@ -22,6 +24,25 @@ const EventSearchBox = ({ onFilterChange }) => {
     setDateFilter(value); // Update date filter state
     onFilterChange({ searchTerm, location: city, dateFilter: value }); // Notify parent
   };
+
+  
+  const handlePriceChange = (e) => {
+    const value = e.target.value;
+    setTicketPrice(value); // Update date filter state
+    onFilterChange({ searchTerm, location: city, dateFilter: value, ticketPrice: value }); // Notify parent
+  };
+
+  
+  const handleCategoryChange = (e) => {
+    const value = e.target.value;
+    setCategory(value); // Update date filter state
+   
+  };
+
+ useEffect(() => {
+    onFilterChange({ category });
+  }, [category]); 
+  
 
   return (
     <div className="flex flex-wrap gap-4">
@@ -42,12 +63,45 @@ const EventSearchBox = ({ onFilterChange }) => {
       <select
         value={dateFilter}
         onChange={handleDateChange}
-        className="bg-transparent border-b-2 border-white rounded-xl px-4 py-2 placeholder-white text-white focus:outline-none"
+        className=" bg-transparent border-b-2 border-white rounded-xl px-4 py-2  text-white focus:outline-none"
       >
         <option value="">Any Date</option>
         <option value="today">Today</option>
         <option value="this_week">This Week</option>
         <option value="this_month">This Month</option>
+      </select>
+
+      <select
+        value={ticketPrice}
+        onChange={handlePriceChange}
+        className=" bg-transparent border-b-2 border-white rounded-xl px-4 py-2  text-white focus:outline-none"
+      placeholder="Price"
+      >
+         <option value="" disabled hidden className="text-gray-400">
+    Price
+  </option>
+   <option value="">Any</option>
+  <option value="free">Free</option>
+  <option value="0-20">$0-$20</option>
+  <option value="20-50">$20-$50</option>
+</select>
+      <select
+        value={category}
+        onChange={handleCategoryChange}
+        placeholder="Category"     
+        className=" bg-transparent border-b-2 border-white rounded-xl px-4 py-2  text-white focus:outline-none"
+
+     >
+        <option value="" disabled hidden className="text-gray-400">
+    Category
+  </option>
+  <option value="">All</option>
+  <option value="ofukai">Ofukai</option>
+  <option value="debut">Debut</option>
+  <option value="graduation">Graduation</option>
+  <option value="taiban">Taiban</option>
+  <option value="birthday">Birthday</option>
+  <option value="online">Online</option>
       </select>
     </div>
   );

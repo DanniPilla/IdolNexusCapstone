@@ -1,8 +1,16 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function ImageCarousel({ images }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setCurrentIndex((prevIndex) =>
+  //     prevIndex === images.length - 1 ? 0 : prevIndex +1
+  //   );
+  //   }, 5000);
+  //   return () => clearInterval(interval); 
+  // }, [images.length]);
   const goToPrevious = () => {
     const isFirstSlide = currentIndex === 0;
     setCurrentIndex(isFirstSlide ? images.length - 1 : currentIndex - 1);
@@ -14,13 +22,14 @@ export default function ImageCarousel({ images }) {
   };
 
   return (
-    <div className="relative w-full max-w-4xl mx-auto">
+    <div className="relative w-full max-w-4xl mx-auto"> 
       {/* Images */}
-      <div className="overflow-hidden relative">
+      <div className="overflow-hidden relative " >
         <img
           src={images[currentIndex]}
           alt={`Slide ${currentIndex}`}
-          className="w-full h-full object-cover"
+          className="w-full h-[300px]object-cover"
+          
           loading="lazy"
         />
       </div>
@@ -63,3 +72,4 @@ ImageCarousel.defaultProps = {
     "https://via.placeholder.com/800x400?text=Default+Image+3",
   ],
 };
+

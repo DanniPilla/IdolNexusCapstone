@@ -1,4 +1,4 @@
-
+import { Link } from "react-router-dom"
 export default function NotFoundResult() {
   return (
 <section class=" dark:bg-gray-900">

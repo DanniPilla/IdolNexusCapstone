@@ -1,5 +1,6 @@
 import { db } from "../lib/index.js";
 import { tickets } from "../db/ticketSchema.js";
+import { eq } from "drizzle-orm";
 
 export const getAllTickets = async (req, res) => {
   try {
@@ -36,12 +37,12 @@ export const createTicket = async (req, res) => {
 };
 
 export const getTicketsByUser = async (req, res) => {
-  const { userId } = req.params;
   try {
+    const userId = req.user.id; // Extract user ID from decoded token
     const userTickets = await db
       .select()
       .from(tickets)
-      .where(tickets.userId === Number(userId));
+      .where(eq(tickets.userId, userId));
     res.json(userTickets);
   } catch (error) {
     console.error("Error fetching user tickets:", error);
@@ -55,7 +56,7 @@ export const getTicketById = async (req, res) => {
     const ticket = await db
       .select()
       .from(tickets)
-      .where(tickets.id === Number(id))
+      .where(eq(tickets.id, id))
       .limit(1);
     if (ticket.length === 0) {
       return res.status(404).json({ message: "Ticket not found." });

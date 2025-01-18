@@ -50,9 +50,7 @@ export default function SinglePage() {
         <meta name="twitter:description" content={event.description} />
         <meta name="twitter:image" content={event.thumbnailImage || "/images/default-event-image.png"} />
       </Helmet>
-      <h1 className="pl-6 text-6xl font-extrabold drop-shadow-lg text-pink-400 text-center mt-[5rem]">
-        {event.name}
-      </h1>
+    
       <div className="mt-8">
         <EventDetailsCard event={event} />
       </div>

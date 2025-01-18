@@ -4,10 +4,13 @@ import { useState, useEffect } from "react";
 const useEventSearch = () => {
   const [eventsData, setEventsData] = useState([]); // All events
   const [filteredEvents, setFilteredEvents] = useState([]); // Filtered events
+  
   const [filters, setFilters] = useState({
     searchTerm: "",
     location: "",
     dateFilter: "",
+    ticketPrice: "",
+    category: "",
   }); // Filters state
   const [loading, setLoading] = useState(false); // Loading state
   const [errorMessage, setErrorMessage] = useState(null); // Error message
@@ -45,7 +48,7 @@ const useEventSearch = () => {
   useEffect(() => {
     if (loading) return;
 
-    const { searchTerm, location, dateFilter } = filters;
+    const { searchTerm, location, dateFilter, ticketPrice, category } = filters;
     let filtered = eventsData;
 
     if (searchTerm) {
@@ -59,6 +62,25 @@ const useEventSearch = () => {
         event.venueCity?.toLowerCase().includes(location.toLowerCase())
       );
     }
+
+    if (ticketPrice === "free") {
+      filtered = filtered.filter((event) =>
+        event.ticketPrice <= 0
+      );
+    }
+if (ticketPrice === "0-20") {
+  filtered = filtered.filter((event) => event.ticketPrice >= 0 && event.ticketPrice <= 20);
+}
+
+if (ticketPrice === "20-50") {
+  filtered = filtered.filter((event) => event.ticketPrice > 20 && event.ticketPrice <= 50);
+}
+
+   if (category) {
+  filtered = filtered.filter((event) =>
+    event.category?.toLowerCase() === category.toLowerCase()
+  );
+}
 
     if (dateFilter === "today") {
       const today = new Date();

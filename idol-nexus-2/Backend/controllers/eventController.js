@@ -1,5 +1,6 @@
 import { db } from "../lib/index.js";
 import { events } from "../db/eventSchema.js";
+import { eq } from "drizzle-orm";
 
 export const getAllEvents = async (req, res) => {
   try {
@@ -21,12 +22,15 @@ export const getAllEvents = async (req, res) => {
 };
 
 export const getEventById = async (req, res) => {
-  const id = req.params;
+  const { id } = req.params;
+  console.log("Fetching event with ID:", id);
   try {
     const event = await db
       .select()
       .from(events)
-      .where(events.id === Number(id));
+      // .leftJoin(users, eq(events.userId, users.id))
+      .where(eq(events.id, Number(id)));
+
     if (event.length === 0) {
       return res.status(404).json({ message: "Event not found" });
     }
@@ -37,8 +41,9 @@ export const getEventById = async (req, res) => {
 };
 
 export const createEvent = async (req, res) => {
-  const { name, description, category, startDate, endDate, userId } = req.body;
+  const { name, description, category, startDate, endDate } = req.body;
   try {
+    const userId = req.user.id;
     const newEvent = await db.insert(events).values({
       name,
       description,
@@ -47,6 +52,7 @@ export const createEvent = async (req, res) => {
       endDate,
       userId,
     });
+
     res.status(201).json({ message: "Event created successfully", newEvent });
   } catch (error) {
     res.status(500).json({ message: "Error creating event", error });
@@ -55,8 +61,39 @@ export const createEvent = async (req, res) => {
 
 export const updateEvent = async (req, res) => {
   const { id } = req.params;
-  const { name, description, category, startDate, endDate, venueId } = req.body;
+  const {
+    name,
+    description,
+    category,
+    startDate,
+    endDate,
+    venueName,
+    venueAddress,
+    venueCity,
+    venueCountry,
+  } = req.body;
+
   try {
+    const userId = req.user.id; // Extract user ID from the token
+
+    // Fetch the event and verify the creator
+    const eventsList = await db
+      .select()
+      .from(events)
+      .where(eq(events.id, Number(id)));
+    const event = eventsList[0]; // Get the first (and only) event
+
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    if (event.userId !== userId) {
+      return res
+        .status(403)
+        .json({ message: "You are not authorized to edit this event" });
+    }
+
+    // Update the event
     const updated = await db
       .update(events)
       .set({
@@ -65,11 +102,16 @@ export const updateEvent = async (req, res) => {
         category,
         startDate,
         endDate,
-        venueId,
+        venueName,
+        venueAddress,
+        venueCity,
+        venueCountry,
       })
-      .where(events.id === Number(id));
+      .where(eq(events.id, Number(id)));
+
     res.json({ message: "Event updated successfully", updated });
   } catch (error) {
+    console.error("Error updating event:", error);
     res.status(500).json({ message: "Error updating event", error });
   }
 };
