@@ -235,7 +235,22 @@ export const getUserById = async (req, res) => {
 // Update user
 export const updateUser = async (req, res) => {
   const { id } = req.params;
-  const { email, firstName, lastName, password, phoneNumber, bio } = req.body;
+  const {
+    email,
+    firstName,
+    lastName,
+    password,
+    phoneNumber,
+    bio,
+    displayName,
+    organisationName,
+    birthday,
+    height,
+    callAndResponse,
+    hobby,
+    favoriteFood,
+    favoriteColor,
+  } = req.body;
 
   try {
     // Check if user exists
@@ -260,8 +275,17 @@ export const updateUser = async (req, res) => {
       phoneNumber: phoneNumber || user.phoneNumber,
       bio: bio || user.bio,
       password: hashedPassword || user.password, // Use hashedPassword if updated
+      displayName: displayName || user.displayName,
+      organisationName: organisationName || user.organisationName,
+      birthday: birthday || user.birthday,
+      height: height || user.height,
+      callAndResponse: callAndResponse || user.callAndResponse,
+      hobby: hobby || user.hobby,
+      favoriteColor: favoriteColor || user.favoriteColor,
+      favoriteFood: favoriteFood || user.favoriteFood,
     };
 
+    // Update the user in the database
     const [updatedUser] = await db
       .update(users)
       .set(updates)
@@ -273,6 +297,15 @@ export const updateUser = async (req, res) => {
         users.lastName,
         users.phoneNumber,
         users.bio,
+        users.password,
+        users.displayName,
+        users.organisationName,
+        users.birthday,
+        users.height,
+        users.callAndResponse,
+        users.hobby,
+        users.favoriteColor,
+        users.favoriteFood,
       ]);
 
     res

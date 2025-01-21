@@ -7,11 +7,28 @@ export const UserProvider = ({ children }) => {
     const savedUser = localStorage.getItem("user");
     return savedUser ? JSON.parse(savedUser) : null;
   });
+
+  const [token, setToken] = useState(() => localStorage.getItem("token"));
+
+  // Sync localStorage whenever user or token changes
+  useEffect(() => {
+    if (token) {
+      localStorage.setItem("token", token);
+    } else {
+      localStorage.removeItem("token");
+    }
+
+    if (user) {
+      localStorage.setItem("user", JSON.stringify(user));
+    } else {
+      localStorage.removeItem("user");
+    }
+  }, [user, token]);
+
+  // Validate user token on mount
   useEffect(() => {
     const validateUser = async () => {
-      const token = localStorage.getItem("token");
-
-      if (!token) return;
+      if (!token) return; // Do nothing if no token is available
 
       try {
         const response = await fetch("http://localhost:5000/api/users/", {
@@ -23,27 +40,30 @@ export const UserProvider = ({ children }) => {
 
         if (response.ok) {
           const userData = await response.json();
-          setUser(userData[0]); // Assuming the API returns an array with one user
+          setUser(userData[0] || null); // Handle cases where the array is empty
         } else {
-          handleLogout(); // Log out if the token is invalid or expired
+          console.error("Token validation failed:", await response.json());
+          handleLogout(); // Log out if the token is invalid
         }
       } catch (error) {
         console.error("Error validating user:", error);
-        handleLogout();
+        handleLogout(); // Log out on network errors
       }
     };
 
     validateUser();
-  }, []); // Run once on page load
+  }, [token]); // Re-run only if token changes
 
+  // Logout function
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setUser(null);
+    setToken(null);
   };
 
   return (
-    <UserContext.Provider value={{ user, setUser, handleLogout }}>
+    <UserContext.Provider value={{ user, setUser, handleLogout, token, setToken }}>
       {children}
     </UserContext.Provider>
   );
