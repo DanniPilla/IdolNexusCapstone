@@ -52,10 +52,17 @@ const UserDisplayCard = ({ users = [], onUpdate }) => {
       console.log("Update successful:", updatedUser);
 
       
-   if (onUpdate) {
-        onUpdate(updatedUser);
+  //  if (onUpdate) {
+  //       onUpdate(updatedUser);
+  //     }
+  if (onUpdate) {
+        onUpdate((prevUsers) =>
+          prevUsers.map((user) =>
+            user.id === updatedUser.id ? updatedUser : user
+          )
+        );
       }
-   
+
 
       setEditingUserId(null);
     } catch (err) {

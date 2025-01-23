@@ -10,25 +10,32 @@ export const UserProvider = ({ children }) => {
 
   const [token, setToken] = useState(() => localStorage.getItem("token"));
 
-  // Sync localStorage whenever user or token changes
-  useEffect(() => {
-    if (token) {
-      localStorage.setItem("token", token);
+  // Wrap setToken to store the token in localStorage
+  const updateToken = (newToken) => {
+    setToken(newToken);
+    if (newToken) {
+      localStorage.setItem("token", newToken);
     } else {
       localStorage.removeItem("token");
     }
+  };
 
-    if (user) {
-      localStorage.setItem("user", JSON.stringify(user));
-    } else {
-      localStorage.removeItem("user");
-    }
-  }, [user, token]);
+  const handleLogin = (userData, token) => {
+    updateToken(token); // Use the wrapped updateToken function
+    setUser(userData);
+    localStorage.setItem("user", JSON.stringify(userData));
+  };
 
-  // Validate user token on mount
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
+    updateToken(null); // Clear the token in both state and localStorage
+  };
+
   useEffect(() => {
     const validateUser = async () => {
-      if (!token) return; // Do nothing if no token is available
+      if (!token) return;
 
       try {
         const response = await fetch("http://localhost:5000/api/users/", {
@@ -40,30 +47,35 @@ export const UserProvider = ({ children }) => {
 
         if (response.ok) {
           const userData = await response.json();
-          setUser(userData[0] || null); // Handle cases where the array is empty
+          if (Array.isArray(userData) && userData.length > 0) {
+            setUser(userData[0]);
+          } else {
+            console.error("Invalid user data received:", userData);
+            handleLogout();
+          }
         } else {
-          console.error("Token validation failed:", await response.json());
-          handleLogout(); // Log out if the token is invalid
+          handleLogout();
         }
       } catch (error) {
         console.error("Error validating user:", error);
-        handleLogout(); // Log out on network errors
+        handleLogout();
       }
     };
 
     validateUser();
-  }, [token]); // Re-run only if token changes
-
-  // Logout function
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setUser(null);
-    setToken(null);
-  };
+  }, [token]);
 
   return (
-    <UserContext.Provider value={{ user, setUser, handleLogout, token, setToken }}>
+    <UserContext.Provider
+      value={{
+        user,
+        token,
+        setUser,
+        setToken: updateToken, // Expose the wrapped updateToken function
+        handleLogin,
+        handleLogout,
+      }}
+    >
       {children}
     </UserContext.Provider>
   );

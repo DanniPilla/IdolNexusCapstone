@@ -7,7 +7,7 @@ const LogIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [requestOptions, setRequestOptions] = useState(null);
-  const { setUser } = useUser();
+  const { setUser, setToken } = useUser(); // Include setToken here
   const navigate = useNavigate();
 
   const { data, loading, error } = useFetch(
@@ -34,19 +34,15 @@ const LogIn = () => {
     if (data) {
       console.log("Login successful:", data);
 
-      // Save the JWT token to localStorage
-      localStorage.setItem("token", data.token);
-
-       localStorage.setItem("user", JSON.stringify(data.user));
-
-
-      // Save user information in the context
+      // Use handleLogin to store token and user in the context and localStorage
       setUser(data.user);
+      setToken(data.token); // Now properly using setToken from UserContext
+      console.log("Token and user saved successfully.");
 
       // Redirect to the home page
       navigate("/");
     }
-  }, [data, navigate, setUser]);
+  }, [data, navigate, setUser, setToken]);
 
   return (
     <div className="flex flex-col justify-center w-full lg:w-1/2 px-8 py-12 lg:px-16 rounded-l-lg">
